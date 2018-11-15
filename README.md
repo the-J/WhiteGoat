@@ -1,0 +1,2 @@
+# WhiteGoat
+Discord bot
