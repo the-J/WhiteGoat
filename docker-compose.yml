@@ -1,0 +1,26 @@
+version: "2"
+services:
+  web:
+    image: node:latest
+    build: .
+    restart: always
+    container_name: WhiteGoatBot
+    depends_on:
+    - postgres
+    ports:
+    - "4000:4000"
+    links:
+    - postgres
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db/postgres
+    command: ["./wait-for-postgres.sh", "node index.js"]
+#    command: ["npm", "start"]
+  postgres:
+    image: postgres:9.4
+    hostname: postgres
+    ports:
+    - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
