@@ -1,4 +1,4 @@
-# WhiteGoat - Simple Discord bot with discord.js
+# WhiteGoat - Simple Discord bot with discord.js, postgres, docker
 
 #### Building 
 Bot should: 

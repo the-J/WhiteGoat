@@ -7,5 +7,6 @@
  */
 
 module.exports = {
-    TOKEN: 'XXXXXXXXXXXX'
+    TOKEN: 'XXXXXXXXXXXX',
+    OWNER: 'XXXXXXXXXXXX'
 };
