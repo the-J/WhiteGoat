@@ -1,4 +1,6 @@
-.idea/
+.idea
+secret.js
+token.js
 
 # Logs
 logs
