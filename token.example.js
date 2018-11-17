@@ -8,5 +8,6 @@
 
 module.exports = {
     TOKEN: 'XXXXXXXXXXXX',
-    OWNER: 'XXXXXXXXXXXX'
+    OWNER: 'XXXXXXXXXXXX',
+    PREFIX: 'SOMESIGN'
 };

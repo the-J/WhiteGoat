@@ -3,7 +3,7 @@ const commando = require('discord.js-commando');
 const DEV = require('./token.js');
 const userCreate = require('./db/methods.js');
 
-prefix = '!';
+const prefix = DEV.PREFIX;
 
 //Connect to discord server
 const bot = new commando.Client({
@@ -21,18 +21,22 @@ bot.login(DEV.TOKEN);
 bot.on('ready', () => {
     console.log('The bot is ready to go');
 
-    const channelIds = [];
     bot.guilds.forEach(guild => {
         guild.channels.forEach(channel => {
-            if (channel.type === 'text') {
-                channelIds.push(channel.id);
+            if (channel.type === 'text' && channel.name === 'whitegoatbot') {
+                const wgChanell = bot.channels.get(channel.id);
+                wgChanell.send('meeeeee');
             }
         });
     });
 
+    userCreate('john');
+});
 
-    for (let i = 0; i < channelIds.length; i++) {
-        const generalChannel = bot.channels.get(channelIds[ i ]);
-        generalChannel.send('Meeeeee');
+bot.on('message', ( message ) => {
+    console.log('message');
+    if (message.author.bot === false && message.content.startsWith(prefix)) {
+        console.log('message passed');
+        userCreate('maria');
     }
 });
