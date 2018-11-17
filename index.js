@@ -1,7 +1,7 @@
 const commando = require('discord.js-commando');
 
 const DEV = require('./token.js');
-var db = require('./db.js');
+const userCreate = require('./db/methods.js');
 
 prefix = '!';
 
