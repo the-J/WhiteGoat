@@ -4,7 +4,7 @@
 const Discord = require('discord.js');
 
 const messages = require('./methods/messages.js');
-const BOT = require('../botCredentials.js');
+const BOT = require('./botCredentials.js');
 const prefix = BOT.PREFIX;
 
 const userCreate = require('../../db/methods.js');

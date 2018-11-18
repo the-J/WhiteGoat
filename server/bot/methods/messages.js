@@ -3,7 +3,7 @@
  */
 
 const bot = require('../bot.js');
-const BOT = require('../../botCredentials.js');
+const BOT = require('../botCredentials.js');
 const prefix = BOT.PREFIX;
 
 const userCreate = require('../../../db/methods.js');
