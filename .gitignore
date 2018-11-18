@@ -1,6 +1,6 @@
 .idea/
-secret.js
-token.js
+serverCredentials.js
+botCredentials.js
 
 # Logs
 logs

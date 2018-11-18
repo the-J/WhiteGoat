@@ -3,7 +3,7 @@
  */
 
 const Sequelize = require('sequelize');
-const SERVER = require('../secret.js');
+const SERVER = require('./serverCredentials.js');
 
 const sequelize = new Sequelize(
     'postgres',
