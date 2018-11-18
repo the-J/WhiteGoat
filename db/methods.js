@@ -5,6 +5,7 @@
 const sequelize = require('./init.js');
 
 const User = require('./schemas.js');
+const TwitchChanelCreate = require('./schemas.js');
 
 const userCreate = function ( username, birthday = new Date(1980, 6, 20) ) {
     sequelize.sync()
@@ -17,4 +18,18 @@ const userCreate = function ( username, birthday = new Date(1980, 6, 20) ) {
         });
 };
 
+const twitchChanelCreate = function ( chanelName ) {
+    if (!chanelName) {
+        console.log('no twitch chanel name');
+    }
+    sequelize.sync()
+        .then(() => TwitchChanelCreate.create({
+            chanelName: chanelName
+        }))
+        .then(stream => {
+            console.log(stream.toJSON() + ' created');
+        });
+};
+
 module.exports = userCreate;
+module.exports = twitchChanelCreate;

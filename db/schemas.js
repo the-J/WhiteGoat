@@ -10,4 +10,9 @@ const User = sequelize.define('user', {
     birthday: Sequelize.DATE
 });
 
+const TwitchChanelCreate = sequelize.define('twitchStream', {
+    chanelName: Sequelize.STRING
+});
+
 module.exports = User;
+module.exports = TwitchChanelCreate ;
