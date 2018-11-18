@@ -1,6 +1,7 @@
 /**
  * Created by juliusz.jakubowski@gmail.com on 17.11.18.
  */
+
 const Sequelize = require('sequelize');
 const sequelize = require('./init.js');
 

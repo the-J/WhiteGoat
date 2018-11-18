@@ -1,6 +1,5 @@
 /**
- * DO NOT PUBLISH
- * @type {string}
+ * Created by juliusz.jakubowski@gmail.com on 18.11.18.
  */
 
 module.exports = {

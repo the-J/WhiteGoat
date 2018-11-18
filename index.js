@@ -1,3 +1,6 @@
+/**
+ * Created by juliusz.jakubowski@gmail.com on 18.11.18.
+ */
 const commando = require('discord.js-commando');
 
 const DEV = require('./token.js');
@@ -5,7 +8,6 @@ const userCreate = require('./db/methods.js');
 
 const prefix = DEV.PREFIX;
 
-//Connect to discord server
 const bot = new commando.Client({
     commandPrefix: prefix,
     owner: [ DEV.OWNER ]

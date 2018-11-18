@@ -1,6 +1,7 @@
 /**
  * Created by juliusz.jakubowski@gmail.com on 17.11.18.
  */
+
 const sequelize = require('./init.js');
 
 const User = require('./schemas.js');
