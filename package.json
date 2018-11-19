@@ -29,12 +29,10 @@
   },
   "dependencies": {
     "discord.js": "^11.4.2",
-    "discord.js-commando": "^0.9.0",
-    "parcel-bundler": "^1.10.3",
     "pg": "^6.1.4",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.41.2",
-    "twitch-js": "^1.2.17"
+    "request": "^2.88.0",
+    "sequelize": "^4.41.2"
   },
   "scripts": {
     "start": "node index.js",

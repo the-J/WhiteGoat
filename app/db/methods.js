@@ -31,5 +31,5 @@ const twitchChanelCreate = function ( chanelName ) {
         });
 };
 
-module.exports = userCreate;
-module.exports = twitchChanelCreate;
+module.exports.userCreate = userCreate;
+module.exports.twitchChanelCreate = twitchChanelCreate;
