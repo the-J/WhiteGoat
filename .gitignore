@@ -1,7 +1,7 @@
 .idea/
 serverCredentials.js
 botCredentials.js
-
+twitchCredentials.js
 # Logs
 logs
 *.log
