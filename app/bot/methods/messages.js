@@ -23,10 +23,13 @@ const manual =
     ' - commands are not case sensitive;\n' +
     ' - when command param is in [] - it is required, else it is not.\n\n\n' +
     '+ COMMANDS\n' +
-    ' * tChannels - list of twitch saved channels;\n' +
-    ' * thAdd [chanel name] (message) - twitch stream listener;\n' +
-    ' * tAddMe [chanel name] - adds your tag to message;\n' +
-    ' * tRemoveMe [chanel name] - removes your tag from message;\n' +
+    ' * tChannels - list of twitch saved channels;\n' + // done
+    ' * tAdd [chanel name] (message) - twitch stream listener;\n' + // done
+    ' * tAddMe [chanel name] - will notify you when selected twitch chanel goes live;\n' + // in progress
+    ' * tRemoveMe [chanel name] - ~tAddMe;\n' +
+    ' * tMine [chanel name] - channels that will notify you;\n' +
+    '+ ADMIN COMMANDS\n' +
+    ' * tRemove [chanel name] - remove twitch stream listener;\n' +
     '```';
 
 const handleMessageAndSendResponse = async function ( message ) {
@@ -37,7 +40,8 @@ const handleMessageAndSendResponse = async function ( message ) {
 
         let response = {
             chanelId: message.channel.id,
-            author: message.author
+            author: message.author,
+            embed: false
         };
 
         const params = message.content.split(' ');
@@ -50,7 +54,7 @@ const handleMessageAndSendResponse = async function ( message ) {
         switch (key) {
             case 'tadd':
                 if (!params[ 1 ] || !params[ 1 ].length) {
-                    response.content = 'At least give me users name....';
+                    response.content = 'Twitch chanel name required mate!';
                     return sendMessage(response);
                 }
                 else {
@@ -121,7 +125,11 @@ const handleMessageAndSendResponse = async function ( message ) {
 const sendMessage = function ( message ) {
     bot.bot.channels
         .get(message.chanelId)
-        .send(message.content + ' ' + message.author);
+        .send(
+            message.embed
+                ? { embed: message.embed }
+                : message.content + ' ' + message.author
+        );
 };
 
 module.exports.handleMessageAndSendResponse = handleMessageAndSendResponse;

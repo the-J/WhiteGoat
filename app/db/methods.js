@@ -33,5 +33,27 @@ function isChanelNameUniq( chanelName ) {
     return TwitchChannels.count({ where: { chanelName } }).then(count => count === 0);
 }
 
-module.exports.userCreate = userCreate;
+function allTwitchChannels() {
+    return TwitchChannels.findAll({ raw: true }).then(channels => channels);
+}
+
+function checkIfChanelExists( chanelName ) {
+    return TwitchChannels.count({ where: { chanelName } }).then(count => !!count);
+}
+
+function addTagToTwitchChanel( chanelName, tag ) {
+    return TwitchChannels.findOne({tags: tags.push(tag)}, { where: { chanelName } })
+        .then(chanel => {
+            chanel.tags = chanel.tags.push(tag);
+
+            chanel.reload().then(() => {
+                console.log({ chanel });
+            });
+        });
+}
+
+// module.exports.userCreate = userCreate;
 module.exports.twitchChanelCreate = twitchChanelCreate;
+module.exports.allTwitchChannels = allTwitchChannels;
+module.exports.checkIfChanelExists = checkIfChanelExists;
+module.exports.addTagToTwitchChanel = addTagToTwitchChanel;
