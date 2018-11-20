@@ -52,6 +52,35 @@ const handleMessageAndSendResponse = async function ( message ) {
         console.log({ key });
 
         switch (key) {
+            case 'tchannels':
+                await db.allTwitchChannels()
+                    .then(channels => {
+                        if (!channels.length) {
+                            response.content = 'Sry, no channels in my DB.';
+                            sendMessage(response);
+                        }
+                        else {
+                            const fields = channels.map(chanel => {
+                                if (chanel.chanelName) {
+                                    return {
+                                        name: chanel.chanelName,
+                                        value: '[twitch](https://www.twitch.tv/' + chanel.chanelName + ')'
+                                    };
+                                }
+                            });
+
+                            response.embed = {
+                                color: 10065164,
+                                title: 'Twitch channels',
+                                description: 'List of all twitch users that I follow',
+                                fields: fields.length ? fields : { name: 'No channels set', value: ' sry mate' },
+                                timestamp: new Date()
+                            };
+
+                            sendMessage(response);
+                        }
+                    });
+                return;
             case 'tadd':
                 if (!params[ 1 ] || !params[ 1 ].length) {
                     response.content = 'Twitch chanel name required mate!';
@@ -100,16 +129,34 @@ const handleMessageAndSendResponse = async function ( message ) {
                     }
                 }
                 break;
-            case 'twitchmessageme':
-                console.log('send Twitch message');
-                response.content = 'Setting new chanel';
-                break;
-            case 'stoplistener':
-                if (ownerMethods(message.author)) {
-
+            case 'taddme':
+                if (!params[ 1 ] || !params[ 1 ].length) {
+                    response.content = 'Twitch chanel name required mate!';
+                    return sendMessage(response);
                 }
-                else response.content = 'I don]\'t think so';
-                break;
+                else {
+                    let chanelExists = false;
+
+                    await db.checkIfChanelExists(params[ 1 ])
+                        .then(exists => {
+                            chanelExists = exists;
+
+                            if (!exists) {
+                                response.author = '';
+                                response.content =
+                                    'No channel named "' + params[ 1 ] + '"\n' +
+                                    'Use `!tAdd [twitch chanel name]` to add.';
+                                return sendMessage(response);
+                            }
+                        });
+
+                    if (chanelExists) {
+                        db.addTagToTwitchChanel(params[1], 'asdasd');
+                    }
+                }
+                return;
+            case 'tremoveme':
+                return;
             case 'man':
                 response.content = manual;
                 response.author = '';
