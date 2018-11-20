@@ -2,67 +2,60 @@
  * Created by juliusz.jakubowski@gmail.com on 19.11.18.
  */
 
-const messages = require('../bot/methods/messages.js');
+const db = require('../db/methods.js');
+
 const twitchCredentials = require('../credentials/twitchCredentials');
 const request = require('request');
 
-function getTwitchData() {
-    console.log('getJson fired');
+let url = {
+    headers: {
+        'Client-ID': twitchCredentials.CLIENTID,
+        'token': twitchCredentials.TOKEN,
+        'Accept': 'application/json',
+        'Accept-Charset': 'utf-8'
+    }
+};
 
-    var result = 'ERROR';
+function checkIfUserExists( userToTest ) {
+    console.log('fired checkIfUserExists');
 
-    request.get(url(), function ( error, response, body ) {
-        try {
-            var result = JSON.parse(body);
-        } catch (err) {
-            console.log('Sorry, something seems to have malfunctioned while getting the streamers');
-        }
+    url[ 'url' ] = 'https://api.twitch.tv/helix/users?login=' + userToTest;
 
-        // result = d.streams[0].channel.display_name;
-        console.log('result data', result.data);
-
-        // for(var i = 0; i < limit; i++){
-        //     streamers.push(d.streams[i].channel.display_name)
-        // }
-        // streamers.push(result);
-        // if (streamers.length <= 0){
-        //     callback("ERROR");
-        // }else{
-        //     callback("SUCCESS got streamers " + result);
-        // }
-
+    return new Promise(function ( resolve, reject ) {
+        request.get(url, function ( err, response, body ) {
+            if (err) reject(err);
+            else resolve(JSON.parse(body));
+        });
     });
-
-    // if (streamers.length < 0) {
-    //     callback('ERROR');
-    // }
-    // else {
-    //     callback('SUCCESS got streamers ' + result);
-    // }
 }
 
-function url() {
-    return {
-        url: 'https://api.twitch.tv/helix/users?login=made_by_j&login=st4s1o&login=splispli',
-        headers: {
-            'Client-ID': twitchCredentials.CLIENTID,
-            'token': twitchCredentials.TOKEN,
-            'Accept': 'application/json',
-            'Accept-Charset': 'utf-8'
-        }
-    };
+function checkIfStreaming( userName ) {
+    console.log('fired checkIfStreaming');
+
+    if (!userName.length) return 'Invalid params mate!';
+
+    url = { url: 'https://api.twitch.tv/helix/streams/user_login=' + userName };
+
+    return new Promise(function ( resolve, reject ) {
+        request.get(url, function ( err, response, body ) {
+            if (err) reject(err);
+            else resolve(JSON.parse(body));
+        });
+    });
 }
 
 const streamListener = () => {
     return;
-    setInterval(() => getTwitchData(), 2000);
-}
+    setInterval(() => checkIfStreaming(), 2000);
+};
 const stopListener = () => {
     console.log(streamListener);
     // streamListener.clearInterval();
-}
+};
 
-const restartListener = '';
 
 module.exports.startListenStreams = streamListener;
 module.exports.stopListener = stopListener;
+
+module.exports.checkIfUserExists = checkIfUserExists;
+module.exports.checkIfStreaming = checkIfStreaming;
