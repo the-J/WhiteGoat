@@ -16,6 +16,19 @@ const ownerMethods = author => {
     return false;
 };
 
+const manual =
+    'Off we go\n' +
+    '```diff\n' +
+    '+ NOTE\n' +
+    ' - commands are not case sensitive;\n' +
+    ' - when command param is in [] - it is required, else it is not.\n\n\n' +
+    '+ COMMANDS\n' +
+    ' * tChannels - list of twitch saved channels;\n' +
+    ' * thAdd [chanel name] (message) - twitch stream listener;\n' +
+    ' * tAddMe [chanel name] - adds your tag to message;\n' +
+    ' * tRemoveMe [chanel name] - removes your tag from message;\n' +
+    '```';
+
 const handleMessageAndSendResponse = async function ( message ) {
     if (!message) return console.log('empty message was passed: ', message);
 
@@ -94,8 +107,9 @@ const handleMessageAndSendResponse = async function ( message ) {
                 else response.content = 'I don]\'t think so';
                 break;
             case 'man':
-                response.content = '';
-                break;
+                response.content = manual;
+                response.author = '';
+                return sendMessage(response);
             default:
                 response.content = 'I dont get it, could you repeat ' + message.author + ', pls?';
                 response.author = '';
