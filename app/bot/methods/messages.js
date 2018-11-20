@@ -63,12 +63,21 @@ const handleMessageAndSendResponse = async function ( message ) {
 
                     if (userExist) {
                         await db.twitchChanelCreate(params[ 1 ])
-                            .then(result => {
-                                if (result.id) {
-                                    response.content = 'Added ' + params[ 1 ] + ' to database. I will keep eye on him';
+                            .then(
+                                result => {
+                                    if (result.id) {
+                                        response.content = 'Added ' + params[ 1 ] + ' to database. I will keep eye on him';
+                                        sendMessage(response);
+                                    }
+                                    else {
+                                        response.content = 'Dunno what happened, try again';
+                                        sendMessage(response);
+                                    }
+                                },
+                                err => {
+                                    response.content = 'Oy! Got some error: ' + err.message;
                                     sendMessage(response);
-                                }
-                            });
+                                });
                     }
                 }
                 break;
