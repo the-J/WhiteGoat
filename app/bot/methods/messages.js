@@ -47,14 +47,10 @@ const handleMessageAndSendResponse = async function ( message ) {
                         .then(
                             result => {
                                 if (!result.data.length) {
-                                    response.content = 'No such user ' + params[ 1 ] + ' mate!';
+                                    response.content = 'No such user on twitch ' + params[ 1 ] + ' mate! Try again.';
+                                    sendMessage(response);
                                 }
-                                else {
-                                    response.content = 'OK, I will add ' + params[ 1 ] + ' to database';
-                                    userExist = true;
-                                }
-
-                                sendMessage(response);
+                                else userExist = true;
                             },
                             err => {
                                 response.content = 'Oy! Got some error: ' + err.message;
@@ -67,6 +63,10 @@ const handleMessageAndSendResponse = async function ( message ) {
                                 result => {
                                     if (result.id) {
                                         response.content = 'Added ' + params[ 1 ] + ' to database. I will keep eye on him';
+                                        sendMessage(response);
+                                    }
+                                    else if (result.exists) {
+                                        response.content = 'I already got ' + params[ 1 ] + ' one fella on the list.';
                                         sendMessage(response);
                                     }
                                     else {

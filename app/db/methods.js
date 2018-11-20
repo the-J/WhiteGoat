@@ -23,10 +23,15 @@ const twitchChanelCreate = function ( chanelName ) {
 
     return new Promise(function ( resolve, reject ) {
         sequelize.sync()
-            .then(() => TwitchChanelCreate.create({ chanelName: chanelName }))
-            .then(stream => resolve(stream.toJSON()));
+            .then(() => isChanelNameUniq(chanelName))
+            .then(isUniq => isUniq ? TwitchChanelCreate.create({ chanelName: chanelName }) : null)
+            .then(data => data ? resolve(data.toJSON()) : resolve({ exists: true }));
     });
 };
+
+function isChanelNameUniq( chanelName ) {
+    return TwitchChanelCreate.count({ where: { chanelName } }).then(count => count === 0);
+}
 
 module.exports.userCreate = userCreate;
 module.exports.twitchChanelCreate = twitchChanelCreate;
