@@ -41,24 +41,35 @@ const handleMessageAndSendResponse = async function ( message ) {
                     return sendMessage(response);
                 }
                 else {
-                    let checkIfUserExists = false;
+                    let userExist = false;
+
                     await twitch.checkIfUserExists(params[ 1 ])
                         .then(
                             result => {
                                 if (!result.data.length) {
-                                    response.content = 'No such user mate!';
+                                    response.content = 'No such user ' + params[ 1 ] + ' mate!';
                                 }
                                 else {
-                                    response.content = 'K, I will add this dude to database';
+                                    response.content = 'OK, I will add ' + params[ 1 ] + ' to database';
+                                    userExist = true;
                                 }
 
                                 sendMessage(response);
                             },
                             err => {
-                                console.log('ererer', { err });
-                                response.content = 'Oy! GOt some error: ' + err.message;
+                                response.content = 'Oy! Got some error: ' + err.message;
                                 sendMessage(response);
                             });
+
+                    if (userExist) {
+                        await db.twitchChanelCreate(params[ 1 ])
+                            .then(result => {
+                                if (result.id) {
+                                    response.content = 'Added ' + params[ 1 ] + ' to database. I will keep eye on him';
+                                    sendMessage(response);
+                                }
+                            });
+                    }
                 }
                 break;
             case 'twitchmessageme':
