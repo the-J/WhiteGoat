@@ -35,7 +35,7 @@ const handleMessageAndSendResponse = async function ( message ) {
         console.log({ key });
 
         switch (key) {
-            case 'twitchadd':
+            case 'tadd':
                 if (!params[ 1 ] || !params[ 1 ].length) {
                     response.content = 'At least give me users name....';
                     return sendMessage(response);
@@ -58,7 +58,9 @@ const handleMessageAndSendResponse = async function ( message ) {
                             });
 
                     if (userExist) {
-                        await db.twitchChanelCreate(params[ 1 ])
+                        const chanelMessage = params.slice(2).join(' ');
+
+                        await db.twitchChanelCreate(params[ 1 ], chanelMessage)
                             .then(
                                 result => {
                                     if (result.id) {
@@ -66,7 +68,7 @@ const handleMessageAndSendResponse = async function ( message ) {
                                         sendMessage(response);
                                     }
                                     else if (result.exists) {
-                                        response.content = 'I already got ' + params[ 1 ] + ' one fella on the list.';
+                                        response.content = 'I already got ' + params[ 1 ] + ' on the list.';
                                         sendMessage(response);
                                     }
                                     else {
@@ -95,8 +97,9 @@ const handleMessageAndSendResponse = async function ( message ) {
                 response.content = '';
                 break;
             default:
-                response.content = 'Sure, on it.';
+                response.content = 'I dont get it, could you repeat ' + message.author + ', pls?';
                 response.author = '';
+                return sendMessage(response);
         }
     }
 };
