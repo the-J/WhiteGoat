@@ -2,8 +2,6 @@
  * Created by juliusz.jakubowski@gmail.com on 19.11.18.
  */
 
-const db = require('../db/methods.js');
-
 const twitchCredentials = require('../credentials/twitchCredentials');
 const request = require('request');
 
@@ -16,25 +14,10 @@ let url = {
     }
 };
 
-function checkIfUserExists( userToTest ) {
-    console.log('fired checkIfUserExists');
-
-    url[ 'url' ] = 'https://api.twitch.tv/helix/users?login=' + userToTest;
-
-    return new Promise(function ( resolve, reject ) {
-        request.get(url, function ( err, response, body ) {
-            if (err) reject(err);
-            else resolve(JSON.parse(body));
-        });
-    });
-}
-
-function checkIfStreaming( userName ) {
-    console.log('fired checkIfStreaming');
-
+function checkIfUserExists( userName ) {
     if (!userName.length) return 'Invalid params mate!';
 
-    url = { url: 'https://api.twitch.tv/helix/streams/user_login=' + userName };
+    url[ 'url' ] = 'https://api.twitch.tv/helix/users?login=' + userName;
 
     return new Promise(function ( resolve, reject ) {
         request.get(url, function ( err, response, body ) {
@@ -44,18 +27,18 @@ function checkIfStreaming( userName ) {
     });
 }
 
-const streamListener = () => {
-    return;
-    setInterval(() => checkIfStreaming(), 2000);
-};
-const stopListener = () => {
-    console.log(streamListener);
-    // streamListener.clearInterval();
-};
+function checkIfStreaming( channels = [] ) {
+    if (!channels.length) return 'Invalid params mate!';
 
+    url[ 'url' ] = 'https://api.twitch.tv/helix/streams?user_login=' + channels.join();
 
-module.exports.startListenStreams = streamListener;
-module.exports.stopListener = stopListener;
+    return new Promise(function ( resolve, reject ) {
+        request.get(url, function ( err, response, body ) {
+            if (err) reject(err);
+            else resolve(JSON.parse(body));
+        });
+    });
+}
 
 module.exports.checkIfUserExists = checkIfUserExists;
 module.exports.checkIfStreaming = checkIfStreaming;

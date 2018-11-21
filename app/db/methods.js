@@ -1,9 +1,10 @@
 /**
  * Created by juliusz.jakubowski@gmail.com on 17.11.18.
  */
-const sequelize = require('./init.js');
-
 const TwitchChannels = require('./schemas.js');
+
+const sequelize = require('./init.js');
+const bot = require('../bot/bot.js');
 
 // create TwitchChanel entry in DB
 const twitchChanelCreate = function ( chanelName, message ) {
@@ -13,7 +14,14 @@ const twitchChanelCreate = function ( chanelName, message ) {
         sequelize.sync()
             .then(() => isChanelNameUniq(chanelName))
             .then(isUniq => isUniq ? TwitchChannels.create({ chanelName: chanelName, message }) : null)
-            .then(data => data ? resolve(data.toJSON()) : resolve({ exists: true }));
+            .then(data => {
+                if (data) {
+                    const raw = data.toJSON();
+                    bot.updateStreamListener(raw.chanelName);
+                    resolve(raw);
+                }
+                else resolve({ exists: true });
+            });
     });
 };
 
@@ -28,8 +36,9 @@ function checkIfTwitchCollectionIsNotEmpty() {
 }
 
 // return all twitch channels collection
-function allTwitchChannels() {
-    return TwitchChannels.findAll({ raw: true }).then(channels => channels);
+function allTwitchChannels( attributes ) {
+    if (attributes) return TwitchChannels.findAll({ attributes, raw: true }).then(channels => channels);
+    else return TwitchChannels.findAll({ raw: true }).then(channels => channels);
 }
 
 // retrieve one twitch chanel from collection

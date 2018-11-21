@@ -5,8 +5,3 @@
 require('./app/db/init');
 require('./app/bot/bot');
 require('./app/twitch/init');
-
-//
-// const twitchInit = require('./server/twitch/init.js');
-//
-// twitchInit.startListenStreams();
