@@ -25,8 +25,9 @@ const manual =
     '+ COMMANDS\n' +
     ' * tChannels - list of twitch saved channels;\n' + // done
     ' * tAdd [chanel name] (message) - twitch stream listener;\n' + // done
-    ' * tAddMe [chanel name] - will notify you when selected twitch chanel goes live;\n' + // in progress
-    ' * tRemoveMe [chanel name] - ~tAddMe;\n' +
+    ' * tAddMe [chanel name] - will notify you when selected twitch chanel goes live;\n' + // done
+    ' * tRemoveMe [chanel name] - ~tAddMe;\n' + // done
+    ' * tRemoveMeAll - removes your tag from every twitch chanel;\n' + // in progress
     ' * tMine [chanel name] - channels that will notify you;\n' +
     '+ ADMIN COMMANDS\n' +
     ' * tRemove [chanel name] - remove twitch stream listener;\n' +
@@ -154,13 +155,42 @@ const handleMessageAndSendResponse = async function ( message ) {
                         await db.addTagToTwitchChanel(params[ 1 ], message.author.id)
                             .then(done => {
                                 if (done) response.content = 'Done. You will be informed whenever ' + params[ 1 ] + '  goes live.';
-                                else response.content = 'Something went wrong. Try again pls.';
+                                else response.content =
+                                    'You where not assigned or something went wrong\n' +
+                                    'Check `!tMine` to see if you are.';
                                 sendMessage(response);
                             });
                     }
                 }
                 return;
             case 'tremoveme':
+                if (!params[ 1 ] || !params[ 1 ].length) {
+                    response.content = 'Yo, Give Me twitch chanel name!';
+                    return sendMessage(response);
+                }
+                else {
+                    let chanelExists = false;
+
+                    await db.checkIfChanelExistsInDb(params[ 1 ])
+                        .then(exists => {
+                            chanelExists = exists;
+
+                            if (!exists) {
+                                response.content = 'No channel named "' + params[ 1 ] + '" so I can\'t remove you\n';
+                                return sendMessage(response);
+                            }
+                        });
+
+                    if (chanelExists) {
+                        await db.removeTagToTwitchChanel(params[ 1 ], message.author.id)
+                            .then(done => {
+                                console.log('done', { done });
+                                if (done) response.content = 'Removed you from ' + params[ 1 ] + ' notification message.';
+                                else response.content = 'Something went wrong. Try again pls.';
+                                sendMessage(response);
+                            });
+                    }
+                }
                 return;
             case 'man':
                 response.content = manual;

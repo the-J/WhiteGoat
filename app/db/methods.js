@@ -42,11 +42,33 @@ function addTagToTwitchChanel( chanelName, userId ) {
     return TwitchChannels.update(
         { userIds: sequelize.fn('array_append', TwitchChannels.sequelize.col('userIds'), userId) },
         { where: { chanelName, $not: [ { userIds: { $contains: [ userId ] } } ] } }
-    ).then(updated => !!updated);
+    ).then(updated => updated);
+}
+
+// remove users id to userIds values if it is not present already
+function removeTagToTwitchChanel( chanelName, userId ) {
+    let userIds = [];
+    return oneTwitchChanel(chanelName)
+        .then(chanel => {
+            if (chanel) {
+                let newUserIds = chanel.userIds;
+                for (let i = 0; i < chanel.userIds.length; i++) {
+                    if (chanel.userIds[ i ] === userId) {
+                        console.log('removing');
+                        console.log(newUserIds, newUserIds.splice(i, 1));
+                        newUserIds = newUserIds.splice(i, 1);
+                    }
+                }
+                userIds = newUserIds;
+            }
+        })
+        .then(() => TwitchChannels.update({ userIds }, { where: { chanelName } }))
+        .then(updated => updated);
 }
 
 module.exports.twitchChanelCreate = twitchChanelCreate;
 module.exports.allTwitchChannels = allTwitchChannels;
 module.exports.checkIfChanelExistsInDb = checkIfChanelExistsInDb;
-module.exports.addTagToTwitchChanel = addTagToTwitchChanel;
 module.exports.oneTwitchChanel = oneTwitchChanel;
+module.exports.addTagToTwitchChanel = addTagToTwitchChanel;
+module.exports.removeTagToTwitchChanel = removeTagToTwitchChanel;
