@@ -137,21 +137,26 @@ const handleMessageAndSendResponse = async function ( message ) {
                 else {
                     let chanelExists = false;
 
-                    await db.checkIfChanelExists(params[ 1 ])
+                    await db.checkIfChanelExistsInDb(params[ 1 ])
                         .then(exists => {
                             chanelExists = exists;
 
                             if (!exists) {
-                                response.author = '';
                                 response.content =
                                     'No channel named "' + params[ 1 ] + '"\n' +
-                                    'Use `!tAdd [twitch chanel name]` to add.';
+                                    'Use `!tAdd [twitch chanel name]` to add chanel \n' +
+                                    'and `!tAddMe [twitch chanel name]` to add your tag to it.\n';
                                 return sendMessage(response);
                             }
                         });
 
                     if (chanelExists) {
-                        db.addTagToTwitchChanel(params[1], 'asdasd');
+                        await db.addTagToTwitchChanel(params[ 1 ], message.author.id)
+                            .then(done => {
+                                if (done) response.content = 'Done. You will be informed whenever ' + params[ 1 ] + '  goes live.';
+                                else response.content = 'Something went wrong. Try again pls.';
+                                sendMessage(response);
+                            });
                     }
                 }
                 return;
