@@ -77,12 +77,9 @@ function removeTagFromAllTwitchChannels( userId ) {
                 for (let i = 0; i < channels.length; i++) {
                     let chanel = channels[ i ];
                     let newUserIds = chanel.userIds;
-
                     const index = newUserIds.indexOf(userId);
-
                     if (index > -1) newUserIds.splice(index, 1);
                     else newUserIds = chanel.userIds;
-
                     updateChannels.push({ id: chanel.id, userIds: newUserIds });
                 }
             }
@@ -102,6 +99,17 @@ function removeTagFromAllTwitchChannels( userId ) {
         .then(() => update);
 }
 
+
+// return all twitch channels that store my userId
+function allTwitchChannelsWithMyTag( userId ) {
+    return TwitchChannels.findAll({
+            where: { userIds: { $contains: [ userId ] } },
+            attributes: [ 'chanelName' ],
+            raw: true
+        }
+    ).then(channels => channels);
+}
+
 module.exports.twitchChanelCreate = twitchChanelCreate;
 module.exports.allTwitchChannels = allTwitchChannels;
 module.exports.checkIfChanelExistsInDb = checkIfChanelExistsInDb;
@@ -110,3 +118,4 @@ module.exports.oneTwitchChanel = oneTwitchChanel;
 module.exports.addTagToTwitchChanel = addTagToTwitchChanel;
 module.exports.removeTagFromOneTwitchChanel = removeTagFromOneTwitchChanel;
 module.exports.removeTagFromAllTwitchChannels = removeTagFromAllTwitchChannels;
+module.exports.allTwitchChannelsWithMyTag = allTwitchChannelsWithMyTag;

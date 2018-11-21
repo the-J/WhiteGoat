@@ -21,16 +21,16 @@ const manual =
     '```diff\n' +
     '+ NOTE\n' +
     ' - commands are not case sensitive;\n' +
+    ' - remember about the prefix: ' + prefix + '\n' +
     ' - when command param is in [] - it is required, else it is not.\n\n\n' +
     '+ COMMANDS\n' +
+    ' * tMan - this manual;\n' + // done
     ' * tChannels - list of twitch saved channels;\n' + // done
     ' * tAdd [chanel name] (message) - twitch stream listener;\n' + // done
     ' * tAddMe [chanel name] - will notify you when selected twitch chanel goes live;\n' + // done
     ' * tRemoveMe [chanel name] - ~tAddMe;\n' + // done
     ' * tRemoveMeAll - removes your tag from every twitch chanel;\n' + // done
-    ' * tMine [chanel name] - channels that will notify you;\n' +
-    '+ ADMIN COMMANDS\n' +
-    ' * tRemove [chanel name] - remove twitch stream listener;\n' +
+    ' * tMine [chanel name] - channels that will notify you;\n' + // done
     '```';
 
 const handleMessageAndSendResponse = async function ( message ) {
@@ -48,9 +48,6 @@ const handleMessageAndSendResponse = async function ( message ) {
         const params = message.content.split(' ');
 
         const key = params[ 0 ].substring(1).toLowerCase();
-
-        console.log({ params });
-        console.log({ key });
 
         switch (key) {
             case 'tchannels':
@@ -192,7 +189,7 @@ const handleMessageAndSendResponse = async function ( message ) {
                     }
                 }
                 return;
-            case 'tRemoveMeAll':
+            case 'tremovemeall':
                 response.content = 'I\'m on it...';
                 sendMessage(response);
 
@@ -218,7 +215,49 @@ const handleMessageAndSendResponse = async function ( message ) {
                         });
                 }
                 return;
-            case 'man':
+            case 'tmine':
+                response.content = 'I\'m on it...';
+                sendMessage(response);
+
+                let notEmpty = false;
+
+                await db.checkIfTwitchCollectionIsNotEmpty()
+                    .then(numberOfEntries => {
+                        if (numberOfEntries === 0) {
+                            response.content = 'No channels stored in DB';
+                            return sendMessage(response);
+                        }
+                        else notEmpty = numberOfEntries;
+                    });
+
+                if (notEmpty) {
+                    await db.allTwitchChannelsWithMyTag(message.author.id)
+                        .then(channels => {
+                            console.log(channels.length);
+                            if (channels.length >= 1) {
+                                const fields = channels.map(chanel => {
+                                    if (chanel.chanelName) {
+                                        return {
+                                            name: chanel.chanelName,
+                                            value: '[twitch](https://www.twitch.tv/' + chanel.chanelName + ')'
+                                        };
+                                    }
+                                });
+
+                                response.embed = {
+                                    color: 10065164,
+                                    title: 'Twitch channels that you follow:',
+                                    fields,
+                                    timestamp: new Date()
+                                };
+                            }
+                            else if (channels.length === 0) response.content = 'You got no subscriptions man! Better change that!';
+                            else response.content = 'Something went wrong. Try again pls.';
+                            sendMessage(response);
+                        });
+                }
+                return;
+            case 'tman':
                 response.content = manual;
                 response.author = '';
                 return sendMessage(response);
