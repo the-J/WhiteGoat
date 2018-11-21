@@ -106,7 +106,7 @@ const handleMessageAndSendResponse = async function ( message ) {
                     if (userExist) {
                         const chanelMessage = params.slice(2).join(' ');
 
-                        await db.twitchChanelCreate(params[ 1 ], chanelMessage)
+                        await db.twitchChanelCreate(params[ 1 ], !!chanelMessage ? chanelMessage : undefined)
                             .then(
                                 result => {
                                     if (result.id) {
