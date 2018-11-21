@@ -27,7 +27,7 @@ const manual =
     ' * tAdd [chanel name] (message) - twitch stream listener;\n' + // done
     ' * tAddMe [chanel name] - will notify you when selected twitch chanel goes live;\n' + // done
     ' * tRemoveMe [chanel name] - ~tAddMe;\n' + // done
-    ' * tRemoveMeAll - removes your tag from every twitch chanel;\n' + // in progress
+    ' * tRemoveMeAll - removes your tag from every twitch chanel;\n' + // done
     ' * tMine [chanel name] - channels that will notify you;\n' +
     '+ ADMIN COMMANDS\n' +
     ' * tRemove [chanel name] - remove twitch stream listener;\n' +
@@ -182,7 +182,7 @@ const handleMessageAndSendResponse = async function ( message ) {
                         });
 
                     if (chanelExists) {
-                        await db.removeTagToTwitchChanel(params[ 1 ], message.author.id)
+                        await db.removeTagFromOneTwitchChanel(params[ 1 ], message.author.id)
                             .then(done => {
                                 console.log('done', { done });
                                 if (done) response.content = 'Removed you from ' + params[ 1 ] + ' notification message.';
@@ -190,6 +190,32 @@ const handleMessageAndSendResponse = async function ( message ) {
                                 sendMessage(response);
                             });
                     }
+                }
+                return;
+            case 'tRemoveMeAll':
+                response.content = 'I\'m on it...';
+                sendMessage(response);
+
+                let remove = false;
+
+                await db.checkIfTwitchCollectionIsNotEmpty()
+                    .then(numberOfEntries => {
+                        if (numberOfEntries === 0) {
+                            response.content = 'No channels stored in DB';
+                            return sendMessage(response);
+                        }
+                        else {
+                            remove = !!numberOfEntries;
+                        }
+                    });
+
+                if (remove) {
+                    await db.removeTagFromAllTwitchChannels(message.author.id)
+                        .then(done => {
+                            if (done >= 0) response.content = 'Removed you from all notification messages.';
+                            else response.content = 'Something went wrong. Try again pls.';
+                            sendMessage(response);
+                        });
                 }
                 return;
             case 'man':

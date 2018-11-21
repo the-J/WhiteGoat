@@ -22,6 +22,11 @@ function isChanelNameUniq( chanelName ) {
     return TwitchChannels.count({ where: { chanelName } }).then(count => count === 0);
 }
 
+// check if collection is not empty
+function checkIfTwitchCollectionIsNotEmpty() {
+    return TwitchChannels.count().then(count => count);
+}
+
 // return all twitch channels collection
 function allTwitchChannels() {
     return TwitchChannels.findAll({ raw: true }).then(channels => channels);
@@ -46,29 +51,62 @@ function addTagToTwitchChanel( chanelName, userId ) {
 }
 
 // remove users id to userIds values if it is not present already
-function removeTagToTwitchChanel( chanelName, userId ) {
+function removeTagFromOneTwitchChanel( chanelName, userId ) {
     let userIds = [];
     return oneTwitchChanel(chanelName)
         .then(chanel => {
             if (chanel) {
                 let newUserIds = chanel.userIds;
-                for (let i = 0; i < chanel.userIds.length; i++) {
-                    if (chanel.userIds[ i ] === userId) {
-                        console.log('removing');
-                        console.log(newUserIds, newUserIds.splice(i, 1));
-                        newUserIds = newUserIds.splice(i, 1);
-                    }
+                const index = newUserIds.indexOf(userId);
+                if (index > -1) userIds = newUserIds.splice(index, 1);
+                else userIds = chanel.userIds;
+            }
+            else userIds = chanel.userIds;
+        })
+        .then(() => TwitchChannels.update({ userIds: userIds }, { where: { chanelName } }))
+        .then(updated => updated);
+}
+
+function removeTagFromAllTwitchChannels( userId ) {
+    let updateChannels = [];
+    let update = 0;
+
+    return TwitchChannels.findAll({ attributes: [ 'id', 'userIds' ], raw: true })
+        .then(channels => {
+            if (channels) {
+                for (let i = 0; i < channels.length; i++) {
+                    let chanel = channels[ i ];
+                    let newUserIds = chanel.userIds;
+
+                    const index = newUserIds.indexOf(userId);
+
+                    if (index > -1) newUserIds.splice(index, 1);
+                    else newUserIds = chanel.userIds;
+
+                    updateChannels.push({ id: chanel.id, userIds: newUserIds });
                 }
-                userIds = newUserIds;
             }
         })
-        .then(() => TwitchChannels.update({ userIds }, { where: { chanelName } }))
-        .then(updated => updated);
+        .then(() => {
+
+            // not really sure about this part of code....
+
+            for (let i = 0; i < updateChannels.length; i++) {
+                TwitchChannels.update(
+                    { userIds: updateChannels[ i ].userIds },
+                    { where: { id: updateChannels[ i ].id } }
+                );
+                update++;
+            }
+        })
+        .then(() => update);
 }
 
 module.exports.twitchChanelCreate = twitchChanelCreate;
 module.exports.allTwitchChannels = allTwitchChannels;
 module.exports.checkIfChanelExistsInDb = checkIfChanelExistsInDb;
+module.exports.checkIfTwitchCollectionIsNotEmpty = checkIfTwitchCollectionIsNotEmpty;
 module.exports.oneTwitchChanel = oneTwitchChanel;
 module.exports.addTagToTwitchChanel = addTagToTwitchChanel;
-module.exports.removeTagToTwitchChanel = removeTagToTwitchChanel;
+module.exports.removeTagFromOneTwitchChanel = removeTagFromOneTwitchChanel;
+module.exports.removeTagFromAllTwitchChannels = removeTagFromAllTwitchChannels;
