@@ -58,8 +58,8 @@ function removeTagFromOneTwitchChanel( chanelName, userId ) {
             if (chanel) {
                 let newUserIds = chanel.userIds;
                 const index = newUserIds.indexOf(userId);
-                if (index > -1) userIds = newUserIds.splice(index, 1);
-                else userIds = chanel.userIds;
+                if (index > -1) newUserIds.splice(index, 1);
+                userIds = newUserIds;
             }
             else userIds = chanel.userIds;
         })
