@@ -38,7 +38,8 @@ Oryginaly I wanted to use MongoDB but it does not support amrv7, that's why I ha
     - [ ] Assign users reminder
     - [ ] Setting reminders to other users
     - Who knows what more
-    
+</a>
+
 #### Setup
 
 Docker files are not yet prepared, so:
@@ -52,16 +53,25 @@ I won't be handling any lack of credentials for now
 
 
 ####Manual (current)
+Bot is not creating any roles (for now) so only owner gets admin permissions.
+I'll extend him later (handling role assignment as so on). 
+
+    Twitch commands manual 
      NOTE 
      - commands are not case sensitive; 
-     - when command param is in [] - it is required, else it is not. 
-     
+     - remember about the prefix:   prefix   
+     - params: [] - is required; () - is optional; else - doesn\t take params 
+    
      COMMANDS 
-     * Twitch
-        * tMan - this manual;  
-        * tChannels - list of twitch saved channels;  
-        * tAdd [chanel name] (message) - twitch stream listener;  
-        * tAddMe [chanel name] - will notify you when selected twitch chanel goes live;  
-        * tRemoveMe [chanel name] - ~tAddMe;  
-        * tRemoveMeAll - removes your tag from every twitch chanel;  
-        * tMine [chanel name] - channels that will notify you;  
+     * tMan - this manual; 
+     * tChannels - list of twitch saved channels; 
+     * tAdd [chanel name] (message) - twitch stream listener; 
+     * tAddMe [chanel name] - will notify you when selected twitch chanel goes live; 
+     * tRemoveMe [chanel name] - ~tAddMe; 
+     * tRemoveMeAll - removes your tag from every twitch chanel; 
+     * tMine - channels that will notify you; 
+     
+     OWNER RESTRICTED  
+     * tRemove [chanel name] - channels that will notify you;  
+     * tStart - start twitch listener;  
+     * tStop - stop twitch listener;  
