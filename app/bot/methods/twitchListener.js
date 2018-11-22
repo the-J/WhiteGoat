@@ -21,11 +21,13 @@ async function startTwitchListener() {
     const intervalTime = twitchChannels.length ? 2000 * twitchChannels.length : 1000;
 
     twitchInterval = setInterval(checkStreaming, 2000);
-}
 
+    return 'Listener started';
+}
 
 function updateTwitchListener( chanel ) {
     clearInterval(twitchInterval);
+
     console.log('updating stream listener');
 
     twitchChannels.push(chanel);
@@ -58,7 +60,7 @@ async function checkStreaming() {
                     streams.data.map(async stream => {
                         if (stream.type && stream.type === 'live') {
                             const chanelName = stream.user_name;
-                            db.setIfIsStreaming(chanelName, true);
+                            await db.setIfIsStreaming(chanelName, true);
                             const message = {
                                 author: { bot: false },
                                 channel: { id: '513325451746476032' },
@@ -77,5 +79,13 @@ async function checkStreaming() {
     }
 }
 
+function stopTwitchListener() {
+    clearInterval(twitchInterval);
+    console.log('stopped twitch listener');
+    return 'Listener stopped';
+}
+
+
 module.exports.startTwitchListener = startTwitchListener;
 module.exports.updateTwitchListener = updateTwitchListener;
+module.exports.stopTwitchListener = stopTwitchListener;

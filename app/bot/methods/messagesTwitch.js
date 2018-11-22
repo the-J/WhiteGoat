@@ -2,8 +2,8 @@
  * Created by juliusz.jakubowski@gmail.com on 18.11.18.
  */
 
-const bot = require('../bot.js');
 const messages = require('./messages.js');
+const twitchListener = require('./twitchListener.js');
 const twitch = require('../../twitch/apiMethods.js');
 const db = require('../../db/methods.js');
 const BOT = require('../../credentials/botCredentials.js');
@@ -35,7 +35,11 @@ const twitchManual =
     '       channels that will notify you;\n\n\n' + // done
     '+ ADMIN RESTRICTED\n' +
     ' * tRemove [chanel name] \n' +
-    '       channels that will notify you;\n' + // done
+    '       channels that will notify you;\n' + // done'
+    ' * tStart \n' +
+    '       start twitch listener;\n' + // done
+    ' * tStop \n' +
+    '       stop twitch listener;\n' + // done
     '```';
 
 /**
@@ -96,6 +100,26 @@ const handleTwitchMessage = async function ( message, response ) {
         case 'tremove':
             if (message.author.id === owner) {
                 return await tRemove(params[ 1 ], response).then(response => messages.sendMessage(response));
+            }
+
+            response.content = 'I don\'t think so.';
+            messages.sendMessage(response);
+            return;
+        case 'tstop':
+            if (message.author.id === owner) {
+                response.content = twitchListener.stopTwitchListener();
+                return messages.sendMessage(response);
+            }
+
+            response.content = 'I don\'t think so.';
+            messages.sendMessage(response);
+            return;
+        case 'tstart':
+            if (message.author.id === owner) {
+                return await twitchListener.startTwitchListener().then(startedResponse => {
+                    response.content = startedResponse;
+                    return messages.sendMessage(response);
+                });
             }
 
             response.content = 'I don\'t think so.';

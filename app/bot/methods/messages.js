@@ -28,7 +28,9 @@ const handleMessageAndSendResponse = async function ( message ) {
             case 't':
                 return await MTwitch.handleTwitchMessage(message, response);
             default:
-                return console.log('bip bop');
+                response.content = 'I dont get it, could you repeat ' + message.author + ', pls?';
+                response.author = '';
+                return sendMessage(response);
         }
     }
 };
