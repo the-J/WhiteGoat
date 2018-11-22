@@ -6,13 +6,13 @@ const sequelize = require('./init.js');
 const twitchListener = require('../bot/methods/twitchListener.js');
 
 // create TwitchChanel entry in DB
-const twitchChanelCreate = function ( chanelName, message ) {
+const twitchChanelCreate = function ( chanelName, chanelId, profileImageUrl, message ) {
     if (!chanelName) return console.log('no twitch chanel name');
 
     return new Promise(function ( resolve, reject ) {
         sequelize.sync()
             .then(() => isChanelNameUniq(chanelName))
-            .then(isUniq => isUniq ? TwitchChannels.create({ chanelName: chanelName, message }) : null)
+            .then(isUniq => isUniq ? TwitchChannels.create({ chanelName, chanelId, profileImageUrl, message }) : null)
             .then(data => {
                 if (data) {
                     const raw = data.toJSON();
@@ -107,7 +107,6 @@ function removeTagFromAllTwitchChannels( userId ) {
         .then(() => update);
 }
 
-
 // return all twitch channels that store my userId
 function allTwitchChannelsWithMyTag( userId ) {
     return TwitchChannels.findAll({
@@ -122,8 +121,8 @@ function removeTwitchChanel( chanelName ) {
     return TwitchChannels.destroy({ where: { chanelName } }).then(removed => !!removed);
 }
 
-function setIfIsStreaming( chanelName, streaming ) {
-    return TwitchChannels.update({ streaming }, { where: { chanelName } });
+function setIfIsStreaming( chanelName, isStreaming ) {
+    return TwitchChannels.update({ streaming: isStreaming }, { fields: [ 'streaming' ], where: { chanelName } });
 }
 
 module.exports.twitchChanelCreate = twitchChanelCreate;
