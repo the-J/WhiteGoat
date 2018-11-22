@@ -5,6 +5,10 @@
 const twitchCredentials = require('../credentials/twitchCredentials');
 const request = require('request');
 
+/**
+ * Twitch client request headers - without url param.
+ * @type {{headers: {'Client-ID': string, token: string, Accept: string, 'Accept-Charset': string}}}
+ */
 let url = {
     headers: {
         'Client-ID': twitchCredentials.CLIENTID,
@@ -14,6 +18,15 @@ let url = {
     }
 };
 
+
+/**
+ * userName param should look like:
+ *      * if one param: chanelName
+ *      * if more than one: twitchChanelName[1] + '&login=' + twitchChanelName[2] + ...
+ * Up to 100 params
+ *
+ * @param {string} userName
+ */
 function checkIfUserExists( userName ) {
     if (!userName.length) return 'Invalid params mate!';
 
@@ -27,6 +40,14 @@ function checkIfUserExists( userName ) {
     });
 }
 
+/**
+ * Channels param should look like:
+ *      * if one param: chanelName
+ *      * if more than one: twitchChanelName[1] + '&user_login=' + twitchChanelName[2] + ...
+ * Up to 100 params
+ *
+ * @param {string} channels
+ */
 function checkIfStreaming( channels ) {
     if (!channels.length) return 'Invalid params mate!';
     console.log('twitch api', { channels });
