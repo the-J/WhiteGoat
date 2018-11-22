@@ -2,9 +2,8 @@
  * Created by juliusz.jakubowski@gmail.com on 17.11.18.
  */
 const TwitchChannels = require('./schemas.js');
-
 const sequelize = require('./init.js');
-const bot = require('../bot/bot.js');
+const twitchListener = require('../bot/methods/twitchListener.js');
 
 // create TwitchChanel entry in DB
 const twitchChanelCreate = function ( chanelName, message ) {
@@ -17,7 +16,7 @@ const twitchChanelCreate = function ( chanelName, message ) {
             .then(data => {
                 if (data) {
                     const raw = data.toJSON();
-                    bot.updateStreamListener(raw.chanelName);
+                    twitchListener.updateTwitchListener(raw);
                     resolve(raw);
                 }
                 else resolve({ exists: true });
@@ -119,6 +118,10 @@ function allTwitchChannelsWithMyTag( userId ) {
     ).then(channels => channels);
 }
 
+function setIfIsStreaming( chanelName, streaming ) {
+    return TwitchChannels.update({ streaming }, { where: { chanelName } });
+}
+
 module.exports.twitchChanelCreate = twitchChanelCreate;
 module.exports.allTwitchChannels = allTwitchChannels;
 module.exports.checkIfChanelExistsInDb = checkIfChanelExistsInDb;
@@ -128,3 +131,4 @@ module.exports.addTagToTwitchChanel = addTagToTwitchChanel;
 module.exports.removeTagFromOneTwitchChanel = removeTagFromOneTwitchChanel;
 module.exports.removeTagFromAllTwitchChannels = removeTagFromAllTwitchChannels;
 module.exports.allTwitchChannelsWithMyTag = allTwitchChannelsWithMyTag;
+module.exports.setIfIsStreaming = setIfIsStreaming;

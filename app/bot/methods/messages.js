@@ -3,7 +3,7 @@
  */
 
 const bot = require('../bot.js');
-const twitch = require('../../twitch/init.js');
+const twitch = require('../../twitch/apiMethods.js');
 const db = require('../../db/methods.js');
 const BOT = require('../../credentials/botCredentials.js');
 
@@ -44,6 +44,8 @@ const handleMessageAndSendResponse = async function ( message ) {
             author: message.author,
             embed: false
         };
+
+        console.log(message.channel.id)
 
         const params = message.content.split(' ');
 
@@ -260,6 +262,10 @@ const handleMessageAndSendResponse = async function ( message ) {
             case 'tman':
                 response.content = manual;
                 response.author = '';
+                return sendMessage(response);
+
+                case 'isstreaming':
+                response.content = message.content;
                 return sendMessage(response);
             default:
                 response.content = 'I dont get it, could you repeat ' + message.author + ', pls?';

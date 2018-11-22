@@ -4,4 +4,3 @@
 
 require('./app/db/init');
 require('./app/bot/bot');
-require('./app/twitch/init');
