@@ -171,20 +171,27 @@ async function tChannels( response ) {
 
 async function tAdd( params, response ) {
     let userExist = false;
+    let chanelId = null;
+    let profileImage = null;
 
     await twitch.checkIfUserExists(params[ 1 ])
         .then(result => {
                 if (!result.data.length) {
                     response.content = 'No such user on twitch ' + params[ 1 ] + ' mate! Try again.';
                 }
-                else userExist = true;
+                else {
+                    chanelId = result.data[0].id;
+                    profileImage = result.data[0].profile_image_url;
+                    userExist = true;
+                }
             },
             err => response.content = 'Oy! Got some error: ' + err.message);
+
 
     if (userExist) {
         const chanelMessage = params.slice(2).join(' ');
 
-        return await db.twitchChanelCreate(params[ 1 ], !!chanelMessage ? chanelMessage : undefined)
+        return await db.twitchChanelCreate(params[ 1 ], chanelId, profileImage,  !!chanelMessage ? chanelMessage : undefined)
             .then(
                 result => {
                     if (result.id) {
