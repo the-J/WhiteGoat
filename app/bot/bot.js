@@ -18,7 +18,7 @@ bot.login(BOT.TOKEN);
 
 bot.on('ready', async () => {
     console.log('Meeeee!!!');
-    await twitchListener.startTwitchListener();
+    // await twitchListener.startTwitchListener();
 });
 
 bot.on('message', message => messages.handleMessageAndSendResponse(message));
