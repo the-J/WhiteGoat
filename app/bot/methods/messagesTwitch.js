@@ -33,13 +33,17 @@ const twitchManual =
     '       removes your tag from every twitch chanel;\n' + // done
     ' * tMine \n' +
     '       channels that will notify you;\n\n\n' + // done
-    '+ ADMIN RESTRICTED\n' +
-    ' * tRemove [chanel name] \n' +
-    '       channels that will notify you;\n' + // done'
-    ' * tStart \n' +
-    '       start twitch listener;\n' + // done
-    ' * tStop \n' +
-    '       stop twitch listener;\n' + // done
+    '```';
+
+const twitchAdminCommands =
+    '```diff\n' +
+    '+ ADMIN RESTRICTED\n ' +
+    ' * tRemove [chanel name] \n ' +
+    '       channels that will notify you;\n ' + // done
+    ' * tStart \n ' +
+    '       start twitch listener;\n ' + // done
+    ' * tStop \n ' +
+    '       stop twitch listener;\n ' + // done
     '```';
 
 /**
@@ -91,6 +95,10 @@ const handleTwitchMessage = async function ( message, response ) {
             messages.sendMessage(response);
             return await tMine(message.author.id, response).then(response => messages.sendMessage(response));
         case 'tman':
+            if (message.author.id === owner) {
+                response.content = twitchManual + '\n' + twitchAdminCommands;
+                return messages.sendMessage(response);
+            }
             response.content = twitchManual;
             response.author = '';
             return messages.sendMessage(response);
