@@ -4,6 +4,6 @@
 
 module.exports = {
     TOKEN: 'XXXXXXXXXXXX',
-    OWNER: 'XXXXXXXXXXXX',
+    OWNER: 'XXXXXXXXXXXX', // owner ID
     PREFIX: 'SOMESIGN'
 };

@@ -9,6 +9,7 @@ const db = require('../../db/methods.js');
 const BOT = require('../../credentials/botCredentials.js');
 
 const prefix = BOT.PREFIX;
+const owner = BOT.OWNER;
 
 const twitchManual =
     'Twitch commands manual\n' +
@@ -31,6 +32,9 @@ const twitchManual =
     ' * tRemoveMeAll \n' +
     '       removes your tag from every twitch chanel;\n' + // done
     ' * tMine \n' +
+    '       channels that will notify you;\n\n\n' + // done
+    '+ ADMIN RESTRICTED\n' +
+    ' * tRemove [chanel name] \n' +
     '       channels that will notify you;\n' + // done
     '```';
 
@@ -89,6 +93,14 @@ const handleTwitchMessage = async function ( message, response ) {
         case 'isstreaming':
             response.content = message.content;
             return messages.sendMessage(response);
+        case 'tremove':
+            if (message.author.id === owner) {
+                return await tRemove(params[ 1 ], response).then(response => messages.sendMessage(response));
+            }
+
+            response.content = 'I don\'t think so.';
+            messages.sendMessage(response);
+            return;
         default:
             response.content = 'I dont get it, could you repeat ' + message.author + ', pls?';
             response.author = '';
@@ -275,6 +287,30 @@ async function tMine( author, response ) {
                 else if (channels.length === 0) response.content = 'You got no subscriptions man! Better change that!';
                 else response.content = 'Something went wrong. Try again pls.';
 
+                return response;
+            });
+    }
+
+    return response;
+}
+
+async function tRemove( chanelName, response ) {
+    let chanelExists = false;
+
+    await db.checkIfChanelExistsInDb(chanelName)
+        .then(exists => {
+            chanelExists = exists;
+
+            if (!exists) {
+                response.content = 'No channel named "' + chanelName + '" so I can\'t remove it\n';
+            }
+        });
+
+    if (chanelExists) {
+        return await db.removeTwitchChanel(chanelName)
+            .then(done => {
+                if (done) response.content = 'Removed ' + chanelName + ' from DB.';
+                else response.content = 'Something went wrong. Try again pls.';
                 return response;
             });
     }

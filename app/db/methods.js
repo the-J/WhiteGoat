@@ -118,6 +118,10 @@ function allTwitchChannelsWithMyTag( userId ) {
     ).then(channels => channels);
 }
 
+function removeTwitchChanel( chanelName ) {
+    return TwitchChannels.destroy({ where: { chanelName } }).then(removed => !!removed);
+}
+
 function setIfIsStreaming( chanelName, streaming ) {
     return TwitchChannels.update({ streaming }, { where: { chanelName } });
 }
@@ -131,4 +135,5 @@ module.exports.addTagToTwitchChanel = addTagToTwitchChanel;
 module.exports.removeTagFromOneTwitchChanel = removeTagFromOneTwitchChanel;
 module.exports.removeTagFromAllTwitchChannels = removeTagFromAllTwitchChannels;
 module.exports.allTwitchChannelsWithMyTag = allTwitchChannelsWithMyTag;
+module.exports.removeTwitchChanel = removeTwitchChanel;
 module.exports.setIfIsStreaming = setIfIsStreaming;
