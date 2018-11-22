@@ -27,10 +27,11 @@ function checkIfUserExists( userName ) {
     });
 }
 
-function checkIfStreaming( channels = [] ) {
+function checkIfStreaming( channels ) {
     if (!channels.length) return 'Invalid params mate!';
+    console.log('twitch api', { channels });
 
-    url[ 'url' ] = 'https://api.twitch.tv/helix/streams?user_login=' + channels.join();
+    url[ 'url' ] = 'https://api.twitch.tv/helix/streams?user_login=' + channels;
 
     return new Promise(function ( resolve, reject ) {
         request.get(url, function ( err, response, body ) {
