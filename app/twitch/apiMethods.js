@@ -50,7 +50,6 @@ function checkIfUserExists( userName ) {
  */
 function checkIfStreaming( channels ) {
     if (!channels.length) return 'Invalid params mate!';
-    console.log('twitch api', { channels });
 
     url[ 'url' ] = 'https://api.twitch.tv/helix/streams?user_login=' + channels;
 

@@ -121,8 +121,8 @@ function removeTwitchChanel( chanelName ) {
     return TwitchChannels.destroy({ where: { chanelName } }).then(removed => !!removed);
 }
 
-function setIfIsStreaming( chanelName, isStreaming ) {
-    return TwitchChannels.update({ streaming: isStreaming }, { fields: [ 'streaming' ], where: { chanelName } });
+function setStreaming( chanelId, isStreaming ) {
+    return TwitchChannels.update({ streaming: isStreaming }, { fields: [ 'streaming' ], where: { chanelId } });
 }
 
 module.exports.twitchChanelCreate = twitchChanelCreate;
@@ -135,4 +135,4 @@ module.exports.removeTagFromOneTwitchChanel = removeTagFromOneTwitchChanel;
 module.exports.removeTagFromAllTwitchChannels = removeTagFromAllTwitchChannels;
 module.exports.allTwitchChannelsWithMyTag = allTwitchChannelsWithMyTag;
 module.exports.removeTwitchChanel = removeTwitchChanel;
-module.exports.setIfIsStreaming = setIfIsStreaming;
+module.exports.setStreaming = setStreaming;
