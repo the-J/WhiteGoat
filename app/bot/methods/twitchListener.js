@@ -119,11 +119,7 @@ async function checkStreaming() {
 function stopTwitchListener() {
     clearInterval(twitchInterval);
     const chanelIds = twitchChannels.map(chanel => chanel.chanelId);
-    return db.setStreaming(chanelIds, false)
-        .then(updated => {
-            console.log(updated);
-            return 'Listener stopped';
-        });
+    return db.setStreaming(chanelIds, false).then(()=> 'Listener stopped');
 }
 
 module.exports.startTwitchListener = startTwitchListener;
