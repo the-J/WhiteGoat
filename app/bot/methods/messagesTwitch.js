@@ -102,12 +102,13 @@ const handleTwitchMessage = async function ( message, response ) {
             response.content = twitchManual;
             response.author = '';
             return messages.sendMessage(response);
-        case 'isstreaming':
-            response.content = message.content;
-            return messages.sendMessage(response);
         case 'tremove':
             if (message.author.id === owner) {
-                return await tRemove(params[ 1 ], response).then(response => messages.sendMessage(response));
+                return await tRemove(params[ 1 ], response)
+                    .then(response => {
+                        twitchListener.updateTwitchListener();
+                        return messages.sendMessage(response);
+                    });
             }
 
             response.content = 'I don\'t think so.';
@@ -115,8 +116,11 @@ const handleTwitchMessage = async function ( message, response ) {
             return;
         case 'tstop':
             if (message.author.id === owner) {
-                response.content = twitchListener.stopTwitchListener();
-                return messages.sendMessage(response);
+                return await twitchListener.stopTwitchListener()
+                    .then(updateMessage => {
+                        response.content = updateMessage;
+                        return messages.sendMessage(response);
+                    });
             }
 
             response.content = 'I don\'t think so.';
@@ -124,10 +128,11 @@ const handleTwitchMessage = async function ( message, response ) {
             return;
         case 'tstart':
             if (message.author.id === owner) {
-                return await twitchListener.startTwitchListener().then(startedResponse => {
-                    response.content = startedResponse;
-                    return messages.sendMessage(response);
-                });
+                return await twitchListener.startTwitchListener()
+                    .then(() => {
+                        response.content = 'Listener started';
+                        return messages.sendMessage(response);
+                    });
             }
 
             response.content = 'I don\'t think so.';
