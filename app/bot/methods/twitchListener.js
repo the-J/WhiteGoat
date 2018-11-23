@@ -94,8 +94,6 @@ async function checkStreaming() {
                         // if no one is
                         : false;
 
-                    console.log(chanel.chanelName, chanel.streaming, isStreaming);
-
                     if (chanel.streaming === true && isStreaming) {
 
                         chanel.stoppedCounter++;

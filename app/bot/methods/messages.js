@@ -13,35 +13,44 @@ const handleMessageAndSendResponse = async function ( message ) {
     if (!message) return console.log('empty message was passed: ', message);
 
     if (message.system) {
-        return sendMessage(message);
-        // const embed = new Discord.RichEmbed()
-        //     .setTitle("This is your title, it can hold 256 characters")
-        //     .setAuthor("Author Name", "https://i.imgur.com/lm8s41J.png")
-        //     /*
-        //      * Alternatively, use "#00AE86", [0, 174, 134] or an integer number.
-        //      */
-        //     .setColor(0x00AE86)
-        //     .setDescription("This is the main body of text, it can hold 2048 characters.")
-        //     .setFooter("This is the footer text, it can hold 2048 characters", "http://i.imgur.com/w1vhFSR.png")
-        //     .setImage("http://i.imgur.com/yVpymuV.png")
-        //     .setThumbnail("http://i.imgur.com/p2qNFag.png")
-        //     /*
-        //      * Takes a Date object, defaults to current date.
-        //      */
-        //     .setTimestamp()
-        //     .setURL("https://discord.js.org/#/docs/main/indev/class/RichEmbed")
-        //     .addField("This is a field title, it can hold 256 characters",
-        //         "This is a field value, it can hold 1024 characters.")
-        //     /*
-        //      * Inline fields may not display as inline if the thumbnail and/or image is too big.
-        //      */
-        //     .addField("Inline Field", "They can also be inline.", true)
-        //     /*
-        //      * Blank field, useful to create some space.
-        //      */
-        //     .addBlankField(true)
-        //     .addField("Inline Field 3", "You can have a maximum of 25 fields.", true);
+        let mentions = '';
 
+        if (message.dbData.userIds.length) {
+            mentions = message.dbData.userIds.map(userId => '<@' + userId + '> ').join();
+        }
+
+        message.embed = {
+            title: 'https://www.twitch.tv/' + message.dbData.chanelName,
+            url: 'https://www.twitch.tv/' + message.dbData.chanelName,
+            color: 6570404,
+            image: {
+                url: 'https://static-cdn.jtvnw.net/previews-ttv/live_user_' + message.dbData.chanelName + '-1280x720.jpg'
+            },
+            author: {
+                name: message.dbData.chanelName + ' ' + message.dbData.message
+            },
+            fields: [
+                {
+                    name: 'Started at ',
+                    value: message.streamData.started_at,
+                    inline: true
+                }
+            ]
+        };
+
+        delete message.dbData;
+        delete message.streamData;
+
+        sendMessage(message);
+
+        if (mentions) {
+            delete message.embed;
+            message.content = mentions;
+            message.author = '';
+            sendMessage(message);
+        }
+
+        return;
     }
 
 
