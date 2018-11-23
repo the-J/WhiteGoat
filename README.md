@@ -29,8 +29,9 @@ Oryginaly I wanted to use MongoDB but it does not support amrv7, that's why I ha
 #### What I'm building (what bot should do):
     Handling Twitch.tv (almost done)
     - [x] Register new twitch channels that it will follow
+    - [ ] Setup channels on which it should publish
     - [x] Assign users to twitch stream notification list
-    - [ ] Publish info if twitch channel is live
+    - [X] Publish info if twitch channel is live
 </a>
     
     Calendar (commming next)
