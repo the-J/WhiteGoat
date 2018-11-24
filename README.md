@@ -5,6 +5,13 @@
     - postgres with sequelize
     - docker
     
+    
+### Developers note (to be expanded)
+
+Twitch component works but it lacks in some places. Whats needs to be done next:
+- tMine message should be handled by different DB table:
+    - there should be table of users that would be updated by tAddMe message to store twitchChannel.id 
+
 ### About
 
 I use [discord](https://discordapp.com/) extensively. I use it with clients for **freelance projects**, for communication 
