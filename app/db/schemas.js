@@ -18,7 +18,7 @@ const TwitchChannels = sequelize.define('twitchchannels', {
 });
 
 const TwitchSettings = sequelize.define('twitchsettings', {
-    chanelId: Sequelize.STRING, // text channel id on which bot will answer
+    chanelId: Sequelize.TEXT, // text channel id on which bot will answer
     admins: { type: Sequelize.ARRAY(Sequelize.TEXT), defaultValue: [] }, // bot administrators
     ownerId: { type: Sequelize.TEXT, defaultValue: botOwner } // bot administrators
 });

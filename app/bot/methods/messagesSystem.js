@@ -4,9 +4,11 @@
 
 const messages = require('./messages.js');
 
+// handling messages from system and to system
+// setting up bot and so one
 const handleSystemMessage = async function ( message ) {
     switch (message.type) {
-        case 'streamLive': {
+        case 'streamLive':
             let mentions = '';
 
             if (message.dbData.userIds.length) {
@@ -45,7 +47,17 @@ const handleSystemMessage = async function ( message ) {
             }
 
             return;
-        }
+        case 'lackOfChannelId':
+            message.content = 'Yo! I need some chanelId or I\'ll not answer mate!';
+            message.author = '';
+            return messages.sendMessage(message);
+        case 'welcome':
+            message.content = 'Meeeeee!';
+            message.author = '';
+            return messages.sendMessage(message);
+        case 'setChanelId':
+            // set chanel on which bot should be responsing
+            return;
     }
 };
 
