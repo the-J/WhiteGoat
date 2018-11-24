@@ -34,11 +34,12 @@ bot.on('ready', async () => {
                 message = {
                     system: true,
                     type: 'lackOfChannelId',
-                    chanelId
+                    chanelId,
+                    author: BOT.OWNER
                 };
             }
             else {
-                message= {
+                message = {
                     system: true,
                     type: 'welcome',
                     chanelId: settings.chanelId
