@@ -2,8 +2,8 @@
 
 ### Stack
     - nodejs
-    - postgresDB with sequelize
-    - docker (comming soon)
+    - postgres with sequelize
+    - docker
     
 ### About
 
@@ -18,9 +18,10 @@ And so I need to build my own one.
 
 #####I need a few things:
 
-- Setup calendar reminders with option of assigning users
 - Handle followed twitch channels (that's where I'm gonna start - learning purposes)
+- Setup calendar reminders with option of assigning users
 - **RUN HIM ON RASPBERRY-PI with armv7 processor**
+- Who knows what more...
 
 </a>
 Oryginaly I wanted to use MongoDB but it does not support amrv7, that's why I have postgres 
@@ -41,17 +42,16 @@ Oryginaly I wanted to use MongoDB but it does not support amrv7, that's why I ha
     - Who knows what more
 </a>
 
-#### Setup
+#### Setup with Docker
 
-Docker files are not yet prepared, so:
+You will need to have docker and docker-compose on your system
 
 - Remove '.example.' from all files in credentials and fill info inside them
-- Setup postgresDB on your system
-- run: npm install && npm run dev
+- Insert compatible values into docker-compose file
+- run: ```docker-compose build && docker-compose up```
 
 </a>
-I won't be handling any lack of credentials for now
-
+I won't be handling any lack of credentials for now.
 
 ####Manual (current)
 Bot is not creating any roles (for now) so only owner gets admin permissions.
