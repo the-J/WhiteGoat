@@ -1,9 +1,9 @@
-FROM node:9
-WORKDIR usr/app
-COPY . /usr/app
-RUN apt-get update && apt-get install -y postgresql postgresql-contrib
-RUN ["chmod", "+x", "/usr/app/wait-for-postgres.sh"]
+FROM node:latest
+WORKDIR /usr/WhiteGoat
+COPY ./package.json /usr/WhiteGoat/package.json
+COPY ./webpack.config.js /usr/WhiteGoat/webpack.config.js
+COPY ./index.js /usr/WhiteGoat/index.js
+COPY ./app /usr/WhiteGoat/app
 RUN npm install
-EXPOSE 4000
-CMD npm start
+RUN npm run build
 
