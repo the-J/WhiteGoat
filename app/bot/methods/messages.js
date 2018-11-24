@@ -3,55 +3,26 @@
  */
 
 const bot = require('../bot.js');
-const db = require('../../db/methods.js');
 const MTwitch = require('./messagesTwitch.js');
+const MSys = require('./messagesSystem.js');
+const MAdmin = require('./messagesAdmin.js');
 const BOT = require('../../credentials/botCredentials.js');
 const prefix = BOT.PREFIX;
 
+let botChanelId;
+let botAdmins;
 
-const handleMessageAndSendResponse = async function ( message ) {
+const handleMessage = async function ( message ) {
     if (!message) return console.log('empty message was passed: ', message);
 
     if (message.system) {
-        let mentions = '';
-
-        if (message.dbData.userIds.length) {
-            mentions = message.dbData.userIds.map(userId => '<@' + userId + '> ').join();
-        }
-
-        message.embed = {
-            title: 'https://www.twitch.tv/' + message.dbData.chanelName,
-            url: 'https://www.twitch.tv/' + message.dbData.chanelName,
-            color: 6570404,
-            image: {
-                url: 'https://static-cdn.jtvnw.net/previews-ttv/live_user_' + message.dbData.chanelName + '-1280x720.jpg'
-            },
-            author: {
-                name: message.dbData.chanelName + ' ' + message.dbData.message
-            },
-            fields: [
-                {
-                    name: 'Started at ',
-                    value: message.streamData.started_at,
-                    inline: true
-                }
-            ]
-        };
-
-        delete message.dbData;
-        delete message.streamData;
-
-        sendMessage(message);
-
-        if (mentions) {
-            delete message.embed;
-            message.content = mentions;
-            message.author = '';
-            sendMessage(message);
-        }
-
-        return;
+        return await MSys.handleSystemMessage(message);
     }
+
+    // if (!botChanelId) {
+    //     console.log('no bot channel Id set')
+    //     await botChanelId().then(chanelId => botChanelId = chanelId);
+    // }
 
 
     if (message.content.startsWith(prefix) && message.content.length > 1 &&
@@ -88,5 +59,5 @@ const sendMessage = function ( message ) {
         );
 };
 
-module.exports.handleMessageAndSendResponse = handleMessageAndSendResponse;
+module.exports.handleMessage = handleMessage;
 module.exports.sendMessage = sendMessage;
