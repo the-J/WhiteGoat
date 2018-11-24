@@ -2,7 +2,7 @@
  * Created by juliusz.jakubowski@gmail.com on 22.11.18.
  */
 
-const dbTwitch = require('../../dbTwitch/methodsTwitch');
+const dbTwitch = require('../../db/methodsTwitch');
 const messages = require('./messages.js');
 const twitch = require('../../twitch/apiMethods.js');
 
@@ -20,7 +20,7 @@ async function startTwitchListener() {
     // you can make 30 requests per minute * params in one request
     const intervalTime = twitchChannels.length ? 2000 * twitchChannels.length : 1000;
 
-    twitchInterval = setInterval(checkStreaming, 2000);
+    return twitchInterval = setInterval(checkStreaming, 5000);
 }
 
 function updateTwitchListener() {
@@ -74,12 +74,13 @@ async function checkStreaming() {
                                 .then(() => {
                                     const message = {
                                         system: true,
+                                        type: 'streamLive',
                                         chanelId: '513325451746476032',
                                         dbData: twitchChanelLive,
                                         streamData: streams.data[ i ]
                                     };
 
-                                    messages.handleMessageAndSendResponse(message);
+                                    messages.handleMessage(message);
                                 });
                         }
                     }
