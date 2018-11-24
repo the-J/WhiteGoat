@@ -5,7 +5,7 @@
 const Sequelize = require('sequelize');
 const sequelize = require('./init.js');
 
-const TwitchChannels = sequelize.define('TwitchChannels', {
+const TwitchChannels = sequelize.define("TwitchChannels", {
     chanelName: Sequelize.STRING, // twitch.tv chanel name
     chanelId: Sequelize.STRING, // twitch.tv chanel id
     profileImageUrl: Sequelize.STRING, // twitch.tv profile image
@@ -14,6 +14,4 @@ const TwitchChannels = sequelize.define('TwitchChannels', {
     streaming: {type: Sequelize.BOOLEAN, defaultValue: false} // update if streaming
 });
 
-sequelize.sync();
-
-module.exports = TwitchChannels;
+module.exports.TwitchChannels = TwitchChannels;

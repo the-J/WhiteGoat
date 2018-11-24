@@ -45,11 +45,12 @@ const operatorsAliases = {
 };
 
 const SERVER = require('../credentials/serverCredentials.js');
+const schemas = require('./schemas.js');
 
 const sequelize = new Sequelize(
-    'postgres',
+    SERVER.POSTGRES_DATABASE,
     SERVER.POSTGRES_USER,
-    SERVER.POSTGRES_PASS, {
+    SERVER.POSTGRES_PASSWORD, {
         host: SERVER.POSTGRES_HOST,
         dialect: 'postgres',
 
@@ -61,6 +62,10 @@ const sequelize = new Sequelize(
         },
 
         operatorsAliases
-    });
+    }
+);
+
+const TwitchChannels = schemas.TwitchChannels;
+TwitchChannels.sync();
 
 module.exports = sequelize;
