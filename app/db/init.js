@@ -45,7 +45,6 @@ const operatorsAliases = {
 };
 
 const SERVER = require('../credentials/serverCredentials.js');
-const schemas = require('./schemas.js');
 
 const sequelize = new Sequelize(
     SERVER.POSTGRES_DATABASE,
@@ -64,8 +63,5 @@ const sequelize = new Sequelize(
         operatorsAliases
     }
 );
-
-const TwitchChannels = schemas.TwitchChannels;
-TwitchChannels.sync();
 
 module.exports = sequelize;

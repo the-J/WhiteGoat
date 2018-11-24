@@ -8,7 +8,7 @@ const sequelize = require('./init.js');
 const BOT = require('../credentials/botCredentials.js');
 const botOwner = BOT.OWNER;
 
-const TwitchChannels = sequelize.define('TwitchChannels', {
+const TwitchChannels = sequelize.define('twitchchannels', {
     chanelName: Sequelize.STRING, // twitch.tv chanel name
     chanelId: Sequelize.STRING, // twitch.tv chanel id
     profileImageUrl: Sequelize.STRING, // twitch.tv profile image
@@ -17,11 +17,14 @@ const TwitchChannels = sequelize.define('TwitchChannels', {
     streaming: { type: Sequelize.BOOLEAN, defaultValue: false } // update if streaming
 });
 
-const TwitchSettings = sequelize.define('TwitchSettings', {
+const TwitchSettings = sequelize.define('twitchsettings', {
     chanelId: Sequelize.STRING, // text channel id on which bot will answer
     admins: { type: Sequelize.ARRAY(Sequelize.TEXT), defaultValue: [] }, // bot administrators
     ownerId: { type: Sequelize.TEXT, defaultValue: botOwner } // bot administrators
 });
+
+TwitchChannels.sync({ alter: true });
+TwitchSettings.sync({ alter: true });
 
 module.exports.TwitchChannels = TwitchChannels;
 module.exports.TwitchSettings = TwitchSettings;
