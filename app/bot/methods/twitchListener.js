@@ -2,7 +2,7 @@
  * Created by juliusz.jakubowski@gmail.com on 22.11.18.
  */
 
-const db = require('../../db/methods');
+const dbTwitch = require('../../dbTwitch/methodsTwitch');
 const messages = require('./messages.js');
 const twitch = require('../../twitch/apiMethods.js');
 
@@ -12,7 +12,7 @@ let channelsUrl = '';
 let twitchInterval;
 
 async function startTwitchListener() {
-    await db.allTwitchChannels().then(channels => {
+    await dbTwitch.allTwitchChannels().then(channels => {
         twitchChannels = channels;
         twitchChannels.forEach(channel => channel.stoppedCounter = 0);
     });
@@ -64,13 +64,13 @@ async function checkStreaming() {
                             }
                         });
 
-                        // this chanel is live and isn't set in a db that it's streaming
+                        // this chanel is live and isn't set in a dbTwitch that it's streaming
                         if (twitchChanelLive.streaming === false && streams.data[ i ].type === 'live') {
 
                             twitchChannels[ twitchChanelLive.dbIndex ].streaming = true;
                             twitchChannels[ twitchChanelLive.dbIndex ].stoppedCounter = 0;
 
-                            db.setStreaming(twitchChanelLive.chanelId, true)
+                            dbTwitch.setStreaming(twitchChanelLive.chanelId, true)
                                 .then(() => {
                                     const message = {
                                         system: true,
@@ -103,7 +103,7 @@ async function checkStreaming() {
                             twitchChannels[ index ].streaming = false;
                             twitchChannels[ index ].stoppedCounter = 0;
 
-                            db.setStreaming(twitchChannels[ index ].chanelId, false);
+                            dbTwitch.setStreaming(twitchChannels[ index ].chanelId, false);
                         }
                     }
                 });
@@ -119,7 +119,7 @@ async function checkStreaming() {
 function stopTwitchListener() {
     clearInterval(twitchInterval);
     const chanelIds = twitchChannels.map(chanel => chanel.chanelId);
-    return db.setStreaming(chanelIds, false).then(()=> 'Listener stopped');
+    return dbTwitch.setStreaming(chanelIds, false).then(()=> 'Listener stopped');
 }
 
 module.exports.startTwitchListener = startTwitchListener;

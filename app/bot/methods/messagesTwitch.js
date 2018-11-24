@@ -5,7 +5,7 @@
 const messages = require('./messages.js');
 const twitchListener = require('./twitchListener.js');
 const twitch = require('../../twitch/apiMethods.js');
-const db = require('../../db/methods.js');
+const dbTwitch = require('../../db/methodsTwitch.js');
 const BOT = require('../../credentials/botCredentials.js');
 
 const prefix = BOT.PREFIX;
@@ -146,10 +146,10 @@ const handleTwitchMessage = async function ( message, response ) {
 };
 
 async function tChannels( response ) {
-    return await db.allTwitchChannels()
+    return await dbTwitch.allTwitchChannels()
         .then(channels => {
             if (!channels.length) {
-                response.content = 'Sry, no channels in my DB.';
+                response.content = 'Sry, no channels in my db.';
                 return response;
             }
 
@@ -196,7 +196,7 @@ async function tAdd( params, response ) {
     if (userExist) {
         const chanelMessage = params.slice(2).join(' ');
 
-        return await db.twitchChanelCreate(params[ 1 ], chanelId, profileImage,  !!chanelMessage ? chanelMessage : undefined)
+        return await dbTwitch.twitchChanelCreate(params[ 1 ], chanelId, profileImage,  !!chanelMessage ? chanelMessage : undefined)
             .then(
                 result => {
                     if (result.id) {
@@ -226,10 +226,10 @@ async function tAdd( params, response ) {
 async function tAddMe( params, author, response ) {
     let chanelExists = false;
 
-    await db.checkIfChanelExistsInDb(params[ 1 ]).then(exists => chanelExists = exists);
+    await dbTwitch.checkIfChanelExistsInDb(params[ 1 ]).then(exists => chanelExists = exists);
 
     if (chanelExists) {
-        return await db.addTagToTwitchChanel(params[ 1 ], author)
+        return await dbTwitch.addTagToTwitchChanel(params[ 1 ], author)
             .then(done => {
                 if (done) response.content = 'Done. You will be informed whenever ' + params[ 1 ] + '  goes live.';
                 else response.content =
@@ -251,7 +251,7 @@ async function tAddMe( params, author, response ) {
 async function tRemoveMe( params, author, response ) {
     let chanelExists = false;
 
-    await db.checkIfChanelExistsInDb(params[ 1 ])
+    await dbTwitch.checkIfChanelExistsInDb(params[ 1 ])
         .then(exists => {
             chanelExists = exists;
 
@@ -261,7 +261,7 @@ async function tRemoveMe( params, author, response ) {
         });
 
     if (chanelExists) {
-        return await db.removeTagFromOneTwitchChanel(params[ 1 ], author)
+        return await dbTwitch.removeTagFromOneTwitchChanel(params[ 1 ], author)
             .then(done => {
                 if (done) response.content = 'Removed you from ' + params[ 1 ] + ' notification message.';
                 else response.content = 'Something went wrong. Try again pls.';
@@ -275,10 +275,10 @@ async function tRemoveMe( params, author, response ) {
 async function tRemoveMeAll( author, response ) {
     let remove = false;
 
-    await db.checkIfTwitchCollectionIsNotEmpty()
+    await dbTwitch.checkIfTwitchCollectionIsNotEmpty()
         .then(numberOfEntries => {
             if (numberOfEntries === 0) {
-                response.content = 'No channels stored in DB';
+                response.content = 'No channels stored in database';
             }
             else {
                 remove = !!numberOfEntries;
@@ -286,7 +286,7 @@ async function tRemoveMeAll( author, response ) {
         });
 
     if (remove) {
-        return await db.removeTagFromAllTwitchChannels(author)
+        return await dbTwitch.removeTagFromAllTwitchChannels(author)
             .then(done => {
                 if (done >= 0) response.content = 'Removed you from all notification messages.';
                 else response.content = 'Something went wrong. Try again pls.';
@@ -300,16 +300,16 @@ async function tRemoveMeAll( author, response ) {
 async function tMine( author, response ) {
     let notEmpty = false;
 
-    await db.checkIfTwitchCollectionIsNotEmpty()
+    await dbTwitch.checkIfTwitchCollectionIsNotEmpty()
         .then(numberOfEntries => {
             if (numberOfEntries === 0) {
-                response.content = 'No channels stored in DB';
+                response.content = 'No channels stored in database';
             }
             else notEmpty = numberOfEntries;
         });
 
     if (notEmpty) {
-        return await db.allTwitchChannelsWithMyTag(author)
+        return await dbTwitch.allTwitchChannelsWithMyTag(author)
             .then(channels => {
                 if (channels.length >= 1) {
                     const fields = channels.map(chanel => {
@@ -341,7 +341,7 @@ async function tMine( author, response ) {
 async function tRemove( chanelName, response ) {
     let chanelExists = false;
 
-    await db.checkIfChanelExistsInDb(chanelName)
+    await dbTwitch.checkIfChanelExistsInDb(chanelName)
         .then(exists => {
             chanelExists = exists;
 
@@ -351,9 +351,9 @@ async function tRemove( chanelName, response ) {
         });
 
     if (chanelExists) {
-        return await db.removeTwitchChanel(chanelName)
+        return await dbTwitch.removeTwitchChanel(chanelName)
             .then(done => {
-                if (done) response.content = 'Removed ' + chanelName + ' from DB.';
+                if (done) response.content = 'Removed ' + chanelName + ' from database.';
                 else response.content = 'Something went wrong. Try again pls.';
                 return response;
             });
