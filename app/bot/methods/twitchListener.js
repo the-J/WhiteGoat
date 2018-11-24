@@ -10,15 +10,22 @@ let twitchChannels = [];
 let channelNames = [];
 let channelsUrl = '';
 let twitchInterval;
+let botSettings;
 
 async function startTwitchListener() {
-    await dbTwitch.allTwitchChannels().then(channels => {
-        twitchChannels = channels;
-        twitchChannels.forEach(channel => channel.stoppedCounter = 0);
-    });
+    if (!botSettings || !botSettings.chanelId) {
+        await dbTwitch.botTwitchSettings().then(settings => botSettings = settings);
+    }
 
-    // you can make 30 requests per minute * params in one request
-    const intervalTime = twitchChannels.length ? 2000 * twitchChannels.length : 1000;
+    if (!botSettings || !botSettings.chanelId) {
+        return console.log('no bot settings, stopping this one');
+    }
+
+    await dbTwitch.allTwitchChannels()
+        .then(channels => {
+            twitchChannels = channels;
+            twitchChannels.forEach(channel => channel.stoppedCounter = 0);
+        });
 
     return twitchInterval = setInterval(checkStreaming, 5000);
 }
@@ -74,12 +81,11 @@ async function checkStreaming() {
                                 .then(() => {
                                     const message = {
                                         system: true,
-                                        type: 'streamLive',
-                                        chanelId: '513325451746476032',
+                                        type: 'streamlive',
+                                        chanelId: botSettings.chanelId,
                                         dbData: twitchChanelLive,
                                         streamData: streams.data[ i ]
                                     };
-
                                     messages.handleMessage(message);
                                 });
                         }
@@ -120,7 +126,7 @@ async function checkStreaming() {
 function stopTwitchListener() {
     clearInterval(twitchInterval);
     const chanelIds = twitchChannels.map(chanel => chanel.chanelId);
-    return dbTwitch.setStreaming(chanelIds, false).then(()=> 'Listener stopped');
+    return dbTwitch.setStreaming(chanelIds, false).then(() => 'Listener stopped');
 }
 
 module.exports.startTwitchListener = startTwitchListener;

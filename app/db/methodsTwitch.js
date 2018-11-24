@@ -163,19 +163,10 @@ function updateTwitchSettings( values = undefined ) {
     return schema.TwitchSettings.update(values, { where: { ownerId: BOT.OWNER } });
 }
 
-function setBotAdmins() {
-
-}
 
 // return chanelId on which bot will be responding
-function botChanelId() {
-    return schema.TwitchSettings.find({
-        where: { ownerId: BOT.OWNER },
-        fields: [ 'chanelId' ],
-        raw: true
-    })
-        .then(twitchSettings => twitchSettings)
-        .catch(err => err);
+function botTwitchSettings() {
+    return schema.TwitchSettings.findOne({ where: { ownerId: BOT.OWNER }, raw: true });
 }
 
 module.exports.twitchChanelCreate = twitchChanelCreate;
@@ -192,5 +183,4 @@ module.exports.setStreaming = setStreaming;
 
 module.exports.createTwitchSettings = createTwitchSettings;
 module.exports.updateTwitchSettings = updateTwitchSettings;
-module.exports.setBotAdmins = setBotAdmins;
-module.exports.botChanelId = botChanelId;
+module.exports.botTwitchSettings = botTwitchSettings;
