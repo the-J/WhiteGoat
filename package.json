@@ -8,7 +8,7 @@
     "node",
     "postgres"
   ],
-  "license": "GNU GPLv3",
+  "license": "GPL-3.0-only",
   "main": "index.js",
   "author": {
     "name": "Juliusz Jakubowski",
