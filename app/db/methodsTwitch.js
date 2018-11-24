@@ -139,7 +139,43 @@ function removeTwitchChanel( chanelName ) {
 }
 
 function setStreaming( chanelId, isStreaming ) {
-    return TwitchChannels.update({ streaming: isStreaming }, { fields: [ 'streaming' ], where: { chanelId } });
+    return schema.TwitchChannels.update({ streaming: isStreaming }, { fields: [ 'streaming' ], where: { chanelId } });
+}
+
+/////////////////////// BOT SETTINGS ////////////////////////
+// create TwitchSettings
+function createTwitchSettings() {
+    return schema.TwitchSettings.findOne({ where: { ownerId: BOT.OWNER } })
+        .then(data => {
+            if (data) return data.toJSON();
+            else {
+                return schema.TwitchSettings.create({
+                    ownerId: BOT.OWNER,
+                    admins: [ BOT.OWNER ]
+                })
+                    .then(settings => settings.toJSON());
+            }
+        });
+}
+
+// return chanelId on which bot will be responding
+function updateTwitchSettings( values = undefined ) {
+    return schema.TwitchSettings.update(values, { where: { ownerId: BOT.OWNER } });
+}
+
+function setBotAdmins() {
+
+}
+
+// return chanelId on which bot will be responding
+function botChanelId() {
+    return schema.TwitchSettings.find({
+        where: { ownerId: BOT.OWNER },
+        fields: [ 'chanelId' ],
+        raw: true
+    })
+        .then(twitchSettings => twitchSettings)
+        .catch(err => err);
 }
 
 module.exports.twitchChanelCreate = twitchChanelCreate;
@@ -153,3 +189,8 @@ module.exports.removeTagFromAllTwitchChannels = removeTagFromAllTwitchChannels;
 module.exports.allTwitchChannelsWithMyTag = allTwitchChannelsWithMyTag;
 module.exports.removeTwitchChanel = removeTwitchChanel;
 module.exports.setStreaming = setStreaming;
+
+module.exports.createTwitchSettings = createTwitchSettings;
+module.exports.updateTwitchSettings = updateTwitchSettings;
+module.exports.setBotAdmins = setBotAdmins;
+module.exports.botChanelId = botChanelId;

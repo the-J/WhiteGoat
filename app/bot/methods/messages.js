@@ -5,6 +5,7 @@
 const bot = require('../bot.js');
 const MTwitch = require('./messagesTwitch.js');
 const MSys = require('./messagesSystem.js');
+const MAdm = require('./messagesAdmin.js');
 const BOT = require('../../credentials/botCredentials.js');
 const prefix = BOT.PREFIX;
 
@@ -23,6 +24,11 @@ const handleMessage = async function ( message ) {
     //     await botChanelId().then(chanelId => botChanelId = chanelId);
     // }
 
+    const key = message.content.split(' ')[ 0 ].charAt(1);
+
+    if (key === 's' && message.author.id === BOT.OWNER) {
+        return MAdm.handleAdminMessages(message);
+    }
 
     if (message.content.startsWith(prefix)
         && message.content.length > 1
@@ -36,22 +42,9 @@ const handleMessage = async function ( message ) {
             embed: false
         };
 
-        // const params = message.content.split(' ');
-        const key = message.content.split(' ')[ 0 ].charAt(1);
+        // const key = message.content.split(' ')[ 0 ].charAt(1);
 
         switch (key) {
-            case 's':
-                // messages to system
-
-                console.log(message);
-                message = {
-                    type: 'setChanelId',
-                    chanelId: 'asdasd'
-                };
-
-                console.log(message);
-
-                return await MSys.handleSystemMessage(message);
             case 't':
                 return await MTwitch.handleTwitchMessage(message, response);
             default:
