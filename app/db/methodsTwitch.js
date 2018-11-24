@@ -42,7 +42,7 @@ function checkIfTwitchCollectionIsNotEmpty() {
 
 // return all twitch channels collection
 function allTwitchChannels( attributes ) {
-    console.log(schema.TwitchChannels);
+
     if (attributes) {
         return schema.TwitchChannels.findAll({
             attributes, raw: true
