@@ -125,6 +125,7 @@ async function checkStreaming() {
 
 function stopTwitchListener() {
     clearInterval(twitchInterval);
+    botSettings = {};
     const chanelIds = twitchChannels.map(chanel => chanel.chanelId);
     return dbTwitch.setStreaming(chanelIds, false).then(() => 'Listener stopped');
 }

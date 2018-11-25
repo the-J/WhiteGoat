@@ -20,9 +20,11 @@ bot.login(BOT.TOKEN);
 bot.on('ready', async () => {
     console.log('Meeeee!!!');
 
+    let message = {};
+
     await dbTwitch.createTwitchSettings()
         .then(settings => {
-            let message, chanelId;
+            let chanelId;
 
             if (settings && !settings.chanelId) {
                 bot.guilds.forEach(guild => {
@@ -50,7 +52,9 @@ bot.on('ready', async () => {
         })
         .catch(err => console.log(err));
 
-    await twitchListener.startTwitchListener();
+    if (message) {
+        await twitchListener.startTwitchListener();
+    }
 });
 
 bot.on('message', message => {

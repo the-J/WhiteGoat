@@ -13,7 +13,6 @@ const BOT = require('../../credentials/botCredentials.js');
 const prefix = BOT.PREFIX;
 
 let botSettings;
-let chanelId;
 
 const handleMessage = async function ( message ) {
     if (!message) return console.log('empty message was passed: ', message);
