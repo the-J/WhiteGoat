@@ -22,6 +22,8 @@ bot.on('ready', async () => {
 
     let message = {};
 
+    bot.user.setActivity("!tman");
+
     await dbTwitch.createTwitchSettings()
         .then(settings => {
             let chanelId;
