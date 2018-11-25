@@ -36,8 +36,9 @@
   },
   "scripts": {
     "start": "node index.js",
-    "production": "node bundle.js",
     "dev": "nodemon index.js",
+    "production": "npm run build && node ./dist/build/bundle.js",
+    "prod": "npm install && npm run build && node ./dist/build/bundle.js",
     "build": "npx webpack --config webpack.config.js"
   }
 }

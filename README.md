@@ -3,7 +3,6 @@
 ### Stack
     - nodejs
     - postgres with sequelize
-    - docker
     
     
 ### Developers note (to be expanded)
@@ -51,13 +50,16 @@ Oryginaly I wanted to use MongoDB but it does not support amrv7, that's why I ha
     - Who knows what more
 </a>
 
-#### Setup with Docker
+#### Setup
 
-You will need to have docker and docker-compose on your system
-
+- postgres should be running on your system;
 - Remove '.example.' from all files in credentials and fill info inside them
-- Insert compatible values into docker-compose file
-- run: ```docker-compose build && docker-compose up```
+- options:    
+    - development ```npm run dev``` will do the job in repos directory;
+    - production in this directory ```npm run production``` (simple webpack builds without packaging node_modules)
+    - production outside this dir: copy package.json && ```npm run prod``` (this script could be nicer, I know)
+- With docker:
+    - DOCKER DOES NOT WORK! I GIVE UP! (any pull request will be helpful)
 
 </a>
 I won't be handling any lack of credentials for now.
