@@ -10,7 +10,7 @@
 Twitch component works but it lacks in some places. Whats needs to be done next:
 - tMine message should be handled by different DB table:
     - there should be table of users that would be updated by tAddMe message to store twitchChannel.id 
-- well I need to handle postgres rejections better. Sometimes bot does not respond when DB is empty
+- well, I need to handle postgres promise rejections better and probably optimize db read/write methods. It was my first tmie with postgres and I think I can do better. 
 
 ### About
 
@@ -35,7 +35,7 @@ Oryginaly I wanted to use MongoDB but it does not support amrv7, that's why I ha
 (which supports almost any RaspberryPi processor)
 
 #### What I'm building (what bot should do):
-    Handling Twitch.tv (done)
+    stage 1: Handling Twitch.tv (done)
     - [x] Register new twitch channels that it will follow
     - [X] Setup channels on which it should publish
     - [x] Assign users to twitch stream notification list
@@ -43,7 +43,7 @@ Oryginaly I wanted to use MongoDB but it does not support amrv7, that's why I ha
     - [ ] Allow to assign users as bot admins
 </a>
     
-    Calendar (commming next)
+    stage 2: Calendar
     - [ ] Setting reminders
     - [ ] Assign users reminder
     - [ ] Setting reminders to other users
