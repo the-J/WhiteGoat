@@ -1,3 +1,9 @@
+#####################################
+#     NANANANNAA I DONT NOW,
+#     THIS DOES NOT WORK
+#     AS EXPECTED, TIRED OF TRYING
+#####################################
+
 #FROM node:10
 #COPY . /
 #WORKDIR /
