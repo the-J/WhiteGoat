@@ -25,7 +25,7 @@ And so I need to build my own one.
 
 #####I need a few things:
 
-- Handle followed twitch channels (that's where I'm gonna start - learning purposes)
+- Handle followed twitch channels DONE - (that's where I'm gonna start - learning purposes)
 - Setup calendar reminders with option of assigning users
 - **RUN HIM ON RASPBERRY-PI with armv7 processor**
 - Who knows what more...
@@ -35,7 +35,7 @@ Oryginaly I wanted to use MongoDB but it does not support amrv7, that's why I ha
 (which supports almost any RaspberryPi processor)
 
 #### What I'm building (what bot should do):
-    Handling Twitch.tv (almost done)
+    Handling Twitch.tv (done)
     - [x] Register new twitch channels that it will follow
     - [X] Setup channels on which it should publish
     - [x] Assign users to twitch stream notification list
