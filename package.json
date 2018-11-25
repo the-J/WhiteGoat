@@ -38,7 +38,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "production": "npm run build && node ./dist/build/bundle.js",
-    "prod": "npm install && npm run build && node ./dist/build/bundle.js",
+    "prod": "npm install && node bundle.js",
     "build": "npx webpack --config webpack.config.js"
   }
 }

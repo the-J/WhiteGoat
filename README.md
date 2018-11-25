@@ -57,7 +57,7 @@ Oryginaly I wanted to use MongoDB but it does not support amrv7, that's why I ha
 - options:    
     - development ```npm run dev``` will do the job in repos directory;
     - production in this directory ```npm run production``` (simple webpack builds without packaging node_modules)
-    - production outside this dir: copy package.json && ```npm run prod``` (this script could be nicer, I know)
+    - production outside this dir: copy package.json and ./dist/build/bundle.js to selected folder && ```npm run prod``` (this script could be nicer, I know)
 - With docker:
     - DOCKER DOES NOT WORK! I GIVE UP! (any pull request will be helpful)
 
