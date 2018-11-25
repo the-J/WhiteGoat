@@ -1,24 +1,24 @@
-version: "2"
-
-services:
-  app:
-    image: node:latest
-    restart: always
-    working_dir: /usr/WhiteGoat
-    container_name: WhiteGoatBot
-    depends_on:
-      - db
-    network_mode: service:db
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@db/whitegoatbot
-    command: ["npm", "run", "production"]
-
-  db:
-    image: postgres:latest
-    restart: always
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_DB: whitegoatbot
+#version: "2"
+#
+#services:
+#  app:
+#    image: node:10
+#    restart: always
+##    working_dir: /usr/src/whitegoat
+#    container_name: WhiteGoatBot
+#    depends_on:
+#      - db
+#    network_mode: service:db
+#    environment:
+#      DATABASE_URL: postgres://postgres:postgres@db/postgres
+#    command: ["npm", "run", "production"]
+#
+#  db:
+#    image: postgres:11.1
+#    restart: always
+#    ports:
+#      - "5432:5432"
+#    environment:
+#      POSTGRES_PASSWORD: postgres
+#      POSTGRES_USER: postgres
+#      POSTGRES_DB: postgres
