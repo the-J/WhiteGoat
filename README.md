@@ -4,6 +4,10 @@
     - nodejs
     - postgres with sequelize
     
+</a>
+Test bot was not authorized on twitch.tv API during recording
+
+![WhiteGOatBot](WhiteGoatBot.gif)
     
 ### Developers note (to be expanded)
 
