@@ -2,12 +2,20 @@
  * Created by juliusz.jakubowski@gmail.com on 19.11.18.
  */
 
-const twitchCredentials = require('../credentials/twitchCredentials');
-const request = require('request');
+import request from 'request';
+
+import twitchCredentials from '../credentials/twitchCredentials';
 
 /**
  * Twitch client request headers - without url param.
- * @type {{headers: {'Client-ID': string, token: string, Accept: string, 'Accept-Charset': string}}}
+ * @type {{
+ *      headers: {
+ *          'Client-ID': string,
+ *          token: string,
+ *          Accept: string,
+ *          'Accept-Charset': string
+ *      }
+ * }}
  */
 let url = {
     headers: {
