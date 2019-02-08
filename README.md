@@ -14,7 +14,8 @@ Test bot was not authorized on twitch.tv API during recording
 Twitch component works but it lacks in some places. Whats needs to be done next:
 - tMine message should be handled by different DB table:
     - there should be table of users that would be updated by tAddMe message to store twitchChannel.id 
-- well, I need to handle postgres promise rejections better and probably optimize db read/write methods. It was my first tmie with postgres and I think I can do better. 
+- ~~well, I need to handle postgres promise rejections better and probably optimize db read/write methods. It was my 
+first tmie with postgres and I think I can do better.~~ Going back to Mongo
 
 ### About
 
